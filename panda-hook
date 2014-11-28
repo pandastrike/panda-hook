@@ -314,25 +314,7 @@ build_command ()
   #-----------------
   # Command Parsing
   #-----------------
-  # Create the bare clone.  Check to make sure a directory with that name doesn't already exist.
-  ssh $pandahook_target /usr/bin/bash << EOF
-      if [ -d "$2" ]; then
-          echo ""
-          echo "WARNGING: A directory named $2 has been detected.  Overwriting."
-          echo ""
-          rm -rf "$2"
-      fi
-
-      /usr/bin/git clone --bare $3 $2
-EOF
-
-  # Store the name and source address.
-  export pandahook_repo_source=$3
-  export pandahook_repo_name=$2
-  echo ""
-  echo "The bare repo \"$2\" has been successfully cloned from \"$3\"."
-  echo "\"$2\" is now ready to accept githooks."
-  echo ""
+  # There is a lot more to do here.
 
 
 }
