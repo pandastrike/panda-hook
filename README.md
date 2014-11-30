@@ -41,14 +41,9 @@ Now, there are some nice benefits to having a centralized repository up on the w
 
 What follows is a comparison of the two tools.  In general PandaHook aims to be a client-side tool that wraps annoying SSH based commands to the hook-server into short sub-commands.  The design focuses on maintenance and extension, to be future-friendly for this type of DevOps stack.
 
-|Area of Comparison|PandaHook|GitReceive|
-|:---------------:|-----------|----------|
-| General Approach
-| Lives on your local machine.  It's a commandline tool that provides high-level sub-commands to interact with the hook server.  You'll never have deal with low-level shell commands to manually manipulate files on the hook server.  PandaHook is also meant to help with githook script generation.
-| Lives on the hook-server.  It's a commandline tool that provides high-level sub-commands, but these focus on preparing the hook-server's configuration.  The configuration commands are accessed over an SSH connection, while the main sub-commands are invoked programmatically by the githook script.  Scripts are constructed manually.
 
 
-<!-- <table>
+<table>
   <tr>
     <th>Area of Comparison</th>
     <th>PandaHook</th>
@@ -125,4 +120,4 @@ What follows is a comparison of the two tools.  In general PandaHook aims to be 
 
     </td>
   </tr>
-</table> -->
+</table>
