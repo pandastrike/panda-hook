@@ -68,7 +68,9 @@ init_command ()
   # Store the hook-server's address.
   export pandahook_target=$2
   echo ""
-  echo "The address \"$2\" has been stored.  Panda Hook is now ready to interface with the hook-server."
+  echo #"The address \"$2\" has been stored.  Panda Hook is now ready to interface with the hook-server."
+  echo "Until this gets cleared up, please enter this into the commandline:"
+  echo "export pandahook_target=$2"
   echo ""
 }
 
@@ -216,7 +218,7 @@ push_command ()
 
   # Check the number of arguments.  If there is nothing after "push", deliver a manual blurb.
   # Also deliver this blurb is the command is "help"
-  if [[ ("$#" == 1) || ("$2" == "help") ]]; then
+  if [[ ("$#" == 1) || ("$#" == 2) || ("$2" == "help") ]]; then
     echo "Usage: pandahook push REPO_NAME GITHOOK_FILENAME"
     echo "--------------------------------------------"
     echo "Follow any command with \"help\" for more information."
@@ -254,7 +256,7 @@ rm_command ()
 
   # Check the number of arguments.  If there is nothing after "rm", deliver a manual blurb.
   # Also deliver this blurb is the command is "help"
-  if [[ ("$#" == 1) || ("$2" == "help") ]]; then
+  if [[ ("$#" == 1) || ("$#" == 2) || ("$2" == "help") ]]; then
     echo "Usage: pandahook rm REPO_NAME GITHOOK_FILENAME"
     echo "--------------------------------------------"
     echo "Follow any command with \"help\" for more information."
@@ -281,6 +283,64 @@ rm_command ()
   echo ""
 }
 
+
+module_coreos ()
+{
+  #---------------------------
+  # Module Command Definitions
+  #---------------------------
+  help_blurb ()
+  {
+    echo "Usage: pandahook build coreos HOOK-TYPE COMMAND"
+    echo "--------------------------------------------"
+    echo "Follow any command with \"help\" for more information."
+    echo ""
+    echo "coreos automates the process of writing githook scripts with CoreOS. "
+    echo ""
+    echo "HOOK-TYPE is a name that informs git when to activate the githook after it has been"
+    echo "placed into the hook-server. It is also the file-name of the generated script."
+    echo "The generated file is placed into the working directory."
+    echo ""
+    echo "COMMAND specifies which common action the generator should script."
+    echo ""
+    echo "HOOK-TYPE    format: string"
+    echo "COMMAND:"
+    echo "    restart   Restarts every listed service file"
+    echo ""
+  }
+
+  restart_command ()
+  {
+    # This command restarts every service listed after the command.
+    echo "Restart is being built."
+  }
+
+  # Check the number of arguments.  If there is nothing after "coreos", deliver a manual blurb.
+  # Also deliver this blurb is the command is "help"
+  if [[ ("$#" == 2) || ("$#" == 3) || ("$2" == "help") ]]; then
+    help_blurb
+    exit
+  fi
+
+  #-----------------
+  # Command Parsing
+  #-----------------
+  # Detect the command.
+  case "$4" in
+    restart)
+      restart_command "$@"
+      ;;
+    *)
+      # When the module command cannot be found
+      echo ""
+      echo "Error:  Command Not Found: $4"
+      echo ""
+      help_blurb
+      exit
+      ;;
+  esac
+
+}
 
 build_command ()
 {
@@ -310,11 +370,24 @@ build_command ()
     exit
   fi
 
-
   #-----------------
   # Command Parsing
   #-----------------
-  # There is a lot more to do here.
+  # Detect the selected module.
+  case $2 in
+    coreos)
+      module_coreos "$@"
+      ;;
+    *)
+      # When the module cannot be identified, echo the help guide.
+      echo ""
+      echo "Error: Module not found: $2"
+      echo ""
+      echo "Available Modules:"
+      echo "coreos  Generator that knows CoreOS dependencies."
+      exit
+      ;;
+  esac
 
 
 }
@@ -352,9 +425,10 @@ case "$1" in
   status)
     status_command "$@"
     ;;
-  *)  # When the command cannot be identified, echo the help guide.
+  *)
+    # When the command cannot be identified, echo the help guide.
     echo ""
-    echo "Error: Command not found: $1"
+    echo "Error: Command Not Found: $1"
     echo ""
     help_blurb
     exit
