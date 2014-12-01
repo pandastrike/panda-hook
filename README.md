@@ -39,7 +39,7 @@ Githooks are also located in the `.git` directory, and that's the problem.  Gith
 
 Now, there are some nice benefits to having a centralized repository up on the web for everyone to see (Thank You GitHub!).  To accomodate this, git added the "push" command and ushered in some server-side githook scripts.  These are the ones we're interested in, but (for now) they are not touched by git commands.  That's where tools like PandaHook and GitReceive come in.
 
-What follows is a comparison of the two tools.  In general PandaHook aims to be a *client-side* tool that wraps annoying SSH based commands to the hook-server into short sub-commands.  The modular design focuses on maintenance and extension, to be widely useful, and to be future-friendly for this DevOps stack.
+What follows is a comparison of the two tools.  In general PandaHook aims to be a *client-side* tool that wraps tedious SSH based commands to the hook-server into short sub-commands.  The modular design focuses on maintenance and extension, to be widely useful, and to be future-friendly for this DevOps stack.
 
 
 
