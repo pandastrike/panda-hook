@@ -153,11 +153,11 @@ create_command ()
   #-----------------
   # Create the bare clone.  Check to make sure a directory with that name doesn't already exist.
   ssh $pandahook_target /usr/bin/bash << EOF
-      if [ -d "$2" ]; then
+      if [ -d "$2.git" ]; then
           echo ""
-          echo "WARNGING: A directory named $2 has been detected.  Overwriting."
+          echo "WARNGING: A directory named $2.git has been detected.  Overwriting."
           echo ""
-          rm -rf "$2"
+          rm -rf "$2.git"
       fi
 
       /usr/bin/git clone --bare $3 $2.git
@@ -167,8 +167,8 @@ EOF
   export pandahook_repo_source=$3
   export pandahook_repo_name=$2
   echo ""
-  echo "The bare repo \"$2\" has been successfully cloned from \"$3\"."
-  echo "\"$2\" is now ready to accept githooks."
+  echo "The bare repo \"$2.git\" has been successfully cloned from \"$3\"."
+  echo "\"$2.git\" is now ready to accept githooks."
   echo ""
 
 
@@ -197,13 +197,13 @@ destroy_command ()
   # Command Parsing
   #-----------------
   # Delete the remote repo.
-  ssh $pandahook_target "rm -rf $2"
+  ssh $pandahook_target "rm -rf $2.git"
 
   # Store the name and source address.
   unset pandahook_repo_source
   unset pandahook_repo_name
   echo ""
-  echo "The bare repo \"$2\" has been successfully deleted from the hook-server."
+  echo "The bare repo \"$2.git\" has been successfully deleted from the hook-server."
   echo ""
 
 
@@ -238,11 +238,11 @@ push_command ()
   # Command Parsing
   #-----------------
   # Place the githook into the remote repo and make it executable.
-  scp $3 "$pandahook_target:$2/hooks"
-  ssh $pandahook_target "cd $2/hooks; chmod +x $3"
+  scp $3 "$pandahook_target:$2.git/hooks"
+  ssh $pandahook_target "cd $2.git/hooks; chmod +x $3"
 
   echo ""
-  echo "The githook \"$3\" has been successfully pushed to \"$2\" and is online."
+  echo "The githook \"$3\" has been successfully pushed to \"$2.git\" and is online."
   echo ""
 
 
@@ -276,10 +276,10 @@ rm_command ()
   # Command Parsing
   #-----------------
   # Remove the githook from the remote repo.
-  ssh $pandahook_target "cd $2/hooks; rm -f $3"
+  ssh $pandahook_target "cd $2.git/hooks; rm -f $3"
 
   echo ""
-  echo "The githook \"$3\" has been successfully removed from \"$2\"."
+  echo "The githook \"$3\" has been successfully removed from \"$2.git\"."
   echo ""
 }
 
@@ -373,7 +373,7 @@ EOF
     # Now, write the script commands that destroy the specified CoreOS services.
     # We'll need to iterate through the listed ones.
     cat << EOF >> $3
-    
+
 echo ""
 echo "-----------"
 echo "Stopping Service(s)"
