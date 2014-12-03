@@ -1,0 +1,4 @@
+#!/usr/bin/env coffee
+
+# This script is a wrapper for the PandaHook CoffeeScript Node library.
+require("../src/cli")

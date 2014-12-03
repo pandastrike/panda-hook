@@ -1,0 +1,11 @@
+--------------------------------------------
+Usage: pandahook create REPO-NAME
+--------------------------------------------
+Follow any command with "help" for more information.
+
+Create accepts the details necessary to create a bare repo on the hook-server.
+
+You must provide a name for this remote repository.  As a bare repo, it will bear
+the suffix *.git, but this is added automatically for you.
+
+REPO-NAME    format: string

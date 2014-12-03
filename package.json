@@ -1,0 +1,29 @@
+{
+  "name": "PandaHook",
+  "version": "0.1.0",
+  "description": "Githook Script Management Made Easy",
+  "main": "src/cli.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pandastrike/PandaHook.git"
+  },
+  "keywords": [
+    "githook",
+    "git",
+    "continuous-integration"
+  ],
+  "author": "David Harper",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pandastrike/PandaHook/issues"
+  },
+  "homepage": "https://github.com/pandastrike/PandaHook",
+  "dependencies": {
+    "c50n": "^0.7.1",
+    "fairmont": "^0.8.2",
+    "shelljs": "^0.3.0"
+  }
+}

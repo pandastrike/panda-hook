@@ -1,0 +1,26 @@
+# This Bash script places a githook into the remote repo and makes it executable.
+# $1 = Hook Server Address
+# $2 = Repository Name
+# $3 = Githook Script Name
+
+# First, determine whether the specified repository exists.
+ssh $1 /usr/bin/bash << EOF
+  if [ ! -d $2.git ]; then
+    # The repository hasn't been created yet.  Exit here.
+    exit 1
+  fi
+EOF
+
+# Be careful, exits from above terminate the SSH connection, but not this script.
+# Check for push error codes and exit if they are detected.
+if [ "$?" -eq "1" ]; then
+  exit 1
+fi
+
+# Otherwise, we may continue normally.
+scp $3 "$1:$2.git/hooks"
+ssh $1 "cd $2.git/hooks; chmod +x $3"
+
+echo ""
+echo "The githook \"$3\" has been successfully pushed to \"$2.git\" and is online."
+echo ""
