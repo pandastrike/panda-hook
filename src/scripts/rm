@@ -1,0 +1,26 @@
+# This Bash script removes a githook from the remote repo.
+# $1 = Hook Server Address
+# $2 = Repository Name
+# $3 = Githook Script Name
+
+# We should warn the user if the specified repo does not exist.
+ssh $1 /usr/bin/bash << EOF
+  if [ ! -d $2.git ]; then
+    # The specified repository does not exist.  Exit here.
+    exit 1
+  fi
+EOF
+
+# Be careful, exits from above terminate the SSH connection, but not this script.
+# Check for push error codes and exit if they are detected.
+if [ "$?" -eq "1" ]; then
+  exit 1
+fi
+
+# Otherwise, we may continue normally.
+ssh $1 "cd $2.git/hooks; rm -f $3"
+
+
+echo ""
+echo "The githook \"$3\" has been successfully removed from \"$2.git\"."
+echo ""

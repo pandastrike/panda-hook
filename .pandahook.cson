@@ -1,0 +1,5 @@
+hookServer:
+  address: "git@hook.pandastrike.com"
+
+coreos:
+  address: "coreos.pandastrike.com"

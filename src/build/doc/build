@@ -1,0 +1,24 @@
+--------------------------------------------
+Usage: pandahook build MODULE [arg...]
+--------------------------------------------
+Follow any command with "help" for more information.
+
+BUILD automates the process of writing githook scripts. Compared to the other
+commands, build has the most options.  That's why it is further subdivided into
+"modules" that give us flexibility.
+
+For example:  Say we need a githook that restarts a service on a CoreOS cluster,
+so our githook makes use of fleetctl.  But that only applies to projects that
+use CoreOS. Another technology stack will need a completely different set of
+commands to do the same thing.
+
+The BUILD command abstracts the steps needed to (in this example) restart a
+deployment, and bundles unique dependency calls (like fleetctl) into "modules"
+that can be specified in its options.
+
+Available Modules
+-----------------------
+coreos    Generator for the CoreOS deployment stack.
+
+
+-
