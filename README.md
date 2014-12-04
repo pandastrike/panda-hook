@@ -37,7 +37,7 @@ hookServer:
 
 # Optional Stanzas for Target Services.  We will focus on CoreOS here.
 coreos:
-  address: "user@myCoreOSCluster.com" # This is an SSH connection, not HTTPS
+  address: "myCoreOSCluster.com" # This is an SSH connection, not HTTPS
 ```
 
 ## Sub-Commands

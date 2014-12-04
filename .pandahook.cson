@@ -2,4 +2,4 @@ hookServer:
   address: "git@hook.pandastrike.com"
 
 coreos:
-  address: "core@coreos.pandastrike.com"
+  address: "coreos.pandastrike.com"
