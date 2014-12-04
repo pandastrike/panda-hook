@@ -1,8 +1,11 @@
 {
-  "name": "PandaHook",
-  "version": "0.1.0",
+  "name": "pandahook",
+  "version": "0.1.3",
   "description": "Githook Script Management Made Easy",
   "main": "src/cli.coffee",
+  "bin": {
+    "pandahook": "./bin/pandahook"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

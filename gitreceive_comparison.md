@@ -1,38 +1,9 @@
-PandaHook
-=========
-
-### The Ultimate Tool to Manage and Deploy Githook Scripts.
-
----
-Githooks are powerful tools.  Whatever you can script can be performed for you automatically from nothing but a git command.  Panda Hook helps you manage this magic.
-
-PandaHook is designed to not only assist you in generating githook scripts, but also setting them up in a remote server.  PandaHook is meant to be your Swiss Army knife, so it utilizes multiple sub-commands to keep the codebase manageable.  
-
-Here is a sampling:
-
-```
-Usage: pandahook [OPTIONS] COMMAND [arg...]
---------------------------------------------
-Follow any command with "help" for more information.
-
-A tool to manage githook scripts and deploy them to your hook-server.
-
-Commands:
-   build     Generates a githook script
-   create    Clones a remote, bare repo on the hook-server
-   destroy   Deletes a remote repo from the hook-server
-   init      Setup pandahook with details about the hook-server
-   push      Adds the specified githook script to remote repo on the hook-server
-   rm        Deletes the specifed githook script from the remote repo on the hook-server
-   status    Gives details about Panda Hook configuration.
-```
-
-## Comparison to GitReceive:
+# Comparison to GitReceive:
 Let's start by discussing why people have gone through the trouble of building tools like [GitReceive](https://github.com/progrium/gitreceive) and PandaHook.  Githooks are a really cool technology, and while we are most interested in their potential for continuous intergration, they can be used in many ways. The problem is that they can be a little cumbersome to maintain, which is ironic since git has transformed how developers approach source code management.  
 
 Git's philosophy is built on the idea of distributed development, so its design emphasizes the "pull" action.  That is, if you wish to incorporate someone's code, you "pull" from their open repository.  This design paradigm is a break from using a centralized, authoritative repo strictly monitored by the Powers-That-Be.  If you consider that design decision, the following description of the problem PandaHook and GitReceive try to solve becomes clear.
 
-### The Problem
+## The Problem
 Inside a git repository, git maintains your local working tree, a subdirectory of every file that you see if you were to `ls` your repo.  But there's more... Git maintains "meta-data" on your project.  We know git maintains the repo version history, but this all happens out of sight.  Version history is tucked away in the hidden `.git` directory.
 
 Githooks are also located in the `.git` directory, and that's the problem.  Githook scripts were originally meant to be maintained locally and manually by one developer.  They are meant to make your life easier, but they do not move with working tree.  They are "meta-data".
