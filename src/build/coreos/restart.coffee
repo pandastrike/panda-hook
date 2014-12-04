@@ -61,7 +61,7 @@ restart =
     # We'll need to iterate through the listed services.
 
     for i in [7..argv.length - 1]
-      text = "/usr/bin/fleetctl --tunnel #{config.coreos.address} destroy #{argv[i]}.service\"\n"
+      text = "/usr/bin/fleetctl --tunnel #{config.coreos.address} destroy #{argv[i]}.service\n"
       fs.appendFileSync "#{process.cwd()}/#{argv[4]}", "#{text}"
 
 
@@ -81,7 +81,7 @@ restart =
 
     # Finally, bring the service(s) back online.
     for i in [7..argv.length - 1]
-      text = "/usr/bin/fleetctl --tunnel #{config.coreos.address} start #{argv[i]}.service\"\n"
+      text = "/usr/bin/fleetctl --tunnel #{config.coreos.address} start #{argv[i]}.service\n"
       fs.appendFileSync "#{process.cwd()}/#{argv[4]}", "#{text}"
 
 
