@@ -22,7 +22,7 @@ To see how PandaHook is used, you'll need a couple things:
 1. The hook-server, a remote server to host your server-side githooks.
 2. The configuration dotfile, `.pandahook.cson`, completed for your use-case and placed into your local `$HOME` directory (ie, at `~/.pandahook.cson`).  See below for more details.
 3. A git repository on your local machine, from which you will push to the hook-server.
-4. A service running somewhere on a second remote server.  Our initial examples will target services running inside CoreOS clusters.
+4. The service targeted by your githook, running on a second remote server out there somewhere on the Internet.  Our initial examples will target services running inside CoreOS clusters.
 
 You can see a *Hello World* example of PandaHook usage in [this repository](https://github.com/pandastrike/coreos-reflector/blob/master/githook_readme.md).  
 
