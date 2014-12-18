@@ -32,7 +32,7 @@ Reusable configuration data is stored in the dotfile `.pandahook.cson`.  This ke
 
 ```coffee
 # Required Hook-Server Stanza
-hookServer:
+hook_server:
   address: "user@myHookServer.com"   # This is an SSH connection, not HTTPS
 
 # Optional Stanzas for Target Services.  We will focus on CoreOS here.

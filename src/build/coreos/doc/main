@@ -1,14 +1,9 @@
 -----------------------------------------------
-Usage: pandahook build coreos HOOK-TYPE COMMAND
+Usage: pandahook build coreos COMMAND [options]
 -----------------------------------------------
 Follow any command with "help" for more information.
 
 coreos automates the process of writing githook scripts with CoreOS.
-
-HOOK-TYPE is a name that informs git when to activate the githook after it has been
-placed into the hook-server. It is also the file-name of the generated script.
-The generated file is placed into the working directory.  Note: The filename
-must conform to one of the githook type names (post-receive, etc)
 
 COMMAND specifies which common action the generator should script.
 

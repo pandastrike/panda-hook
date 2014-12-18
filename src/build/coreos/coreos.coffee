@@ -6,50 +6,26 @@
 #====================
 # Modules
 #====================
-{resolve} = require "path"
-{read, write} = require "fairmont" # Easy file read/write
+async = (require "when/generator").lift   # Makes resuable generators.
 
-restart = require "./restart"
-
-#====================
-# Helper Fucntions
-#====================
-usage = (entry, message) ->
-  if message?
-    process.stderr.write "#{message}\n"
-
-  process.stderr.write( read( resolve( __dirname, "doc", entry ) ) )
-  process.exit -1
-
+{restart} = require "./restart"
 
 #===============================
-# Sub-Command Definitions
+# Sub-Module Definition
 #===============================
-# Restarts every listed service file.
-cmd_restart = (argv, config) ->
-  # Check the command arguments.  Deliver an info blurb if needed.
-  if argv.length == 6 or argv.length == 7 or argv[6] == "help"
-    usage "restart"
+module.exports =
 
-  # Now, build the script!
-  restart.build argv, config
-
-
-#===============================
-# Module Definition
-#===============================
-coreos =
-  main: (argv, config) ->
-    # Check the command arguments.  Deliver an info blurb if needed.
-    if argv.length == 4 or argv.length == 5 or argv[4] == "help"
-      usage "main"
-
-    # Now, look for module references.
-    switch argv[5]
+  # When this library is accessed programatically, this method used for standardized
+  # access.  Other methods are called from here.
+  main: async (config, options) ->
+    # Continue on to the specified command.
+    switch options.command
       when "restart"
-        cmd_restart argv, config
+        @restart config, options
       else
-        # When the module cannot be identified, display the help guide.
-        usage "main", "\nError: Command Not Found: #{argv[5]} \n"
+        # When the command cannot be identified, throw error.
+        throw "Error: Sub-Command Not Found in CoreOS Build Module: #{options.command}"
 
-module.exports = coreos
+  # Produces a script that destroys and restarts services on the CoreOS cluster.
+  restart: async (config, options) ->
+    restart config, options

@@ -13,8 +13,10 @@ fs = require "fs" # Access to commandline
 #===============================
 # Module Definition
 #===============================
-restart =
-  build: (argv, config) ->
+module.exports =
+  restart: (config, options) ->
+
+    {repo, hook, services} = options
 
     # Write the begining, mostly static portion of the script.
 
@@ -45,24 +47,24 @@ restart =
     # First, wipe away any old versions of the regular repo.  Note that our starting directory\n
     # is the repo's root, not the path of the githook script.\n
     cd ..\n
-    rm -rf #{argv[6]}\n
-    /usr/bin/git clone #{argv[6]}.git #{argv[6]}\n
-    cd #{argv[6]}\n\n
+    rm -rf #{repo}\n
+    /usr/bin/git clone #{repo}.git #{repo}\n
+    cd #{repo}\n\n
 
     echo \"\"\n
     echo \"-----------\"\n
     echo \"Stopping Service(s)\"\n
     echo \"-----------\"\n"
 
-    fs.writeFileSync "#{process.cwd()}/#{argv[4]}", "#{text}"
+    fs.writeFileSync "#{process.cwd()}/#{hook}", "#{text}"
 
 
     # Now, write the script commands that destroy the specified CoreOS services.
     # We'll need to iterate through the listed services.
 
-    for i in [7..argv.length - 1]
-      text = "/usr/bin/fleetctl --tunnel #{config.coreos.address} destroy #{argv[i]}.service\n"
-      fs.appendFileSync "#{process.cwd()}/#{argv[4]}", "#{text}"
+    for service in services
+      text = "/usr/bin/fleetctl --tunnel #{config.coreos.address} destroy #{service}.service\n"
+      fs.appendFileSync "#{process.cwd()}/#{hook}", "#{text}"
 
 
     # Now, pause for a couple seconds to allow this command to register in the CoreOS cluster.
@@ -77,13 +79,9 @@ restart =
     echo \"Restarting Service: CoreOS Reflector Demo\"\n
     echo \"-----------\"\n"
 
-    fs.appendFileSync "#{process.cwd()}/#{argv[4]}", "#{text}"
+    fs.appendFileSync "#{process.cwd()}/#{hook}", "#{text}"
 
     # Finally, bring the service(s) back online.
-    for i in [7..argv.length - 1]
-      text = "/usr/bin/fleetctl --tunnel #{config.coreos.address} start #{argv[i]}.service\n"
-      fs.appendFileSync "#{process.cwd()}/#{argv[4]}", "#{text}"
-
-
-
-module.exports = restart
+    for service in services
+      text = "/usr/bin/fleetctl --tunnel #{config.coreos.address} start #{service}.service\n"
+      fs.appendFileSync "#{process.cwd()}/#{hook}", "#{text}"

@@ -13,37 +13,25 @@
 #====================
 # Modules
 #====================
-{resolve} = require "path"
-{read, write} = require "fairmont" # Easy file read/write
+async = (require "when/generator").lift   # Makes resuable generators.
 
 coreos = require "./coreos/coreos"
-
 
 #====================
 # Helper Fucntions
 #====================
-usage = (entry, message) ->
-  if message?
-    process.stderr.write "#{message}\n"
 
-  process.stderr.write( read( resolve( __dirname, "doc", entry ) ) )
-  process.exit -1
 
 #===============================
 # Module Definition
 #===============================
-builder =
-  main: (argv, config) ->
-    # Check the command arguments.  Deliver an info blurb if needed.
-    if argv.length == 3 or argv[3] == "help"
-      usage "build"
+module.exports =
+  main: async (config, options) ->
 
-    # Now, look for module references.
-    switch argv[3]
+    # Continue on to the specified module.
+    switch options.build_module
       when "coreos"
-        coreos.main argv, config
+        coreos.main config, options
       else
-        # When the module cannot be identified, display the help guide.
-        usage "build", "\nError: Build Module Not Found: #{argv[3]} \n"
-
-module.exports = builder
+        # When the module cannot be identified, throw error.
+        throw "Error: Build Module Not Found: #{options.build_module}"

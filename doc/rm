@@ -1,10 +1,18 @@
 --------------------------------------------
-Usage: pandahook rm REPO-NAME SCRIPT-NAME
+Usage: pandahook rm -n REPO-NAME -h SCRIPT-NAME
 --------------------------------------------
 Follow any command with "help" for more information.
 
 rm deletes a githook script into the specified bare repo on the hook-server.
 These are executable scripts located in the "hooks" directory.
 
-REPO-NAME    format: string
-SCRIPT-NAME  format: filename (must be named one of the githook types)
+Required:
+  -h  Name of githook script.
+
+        Allowed Values:
+        "applypatch-msg", "pre-applypatch", "post-applypatch", "pre-commit",
+        "prepare-commit-msg", "commit-msg", "commit-msg", "post-commit",
+        "pre-rebase", "post-checkout", "post-merge", "pre-push", "pre-receive",
+        "update", "post-receive", "post-update", "pre-auto-gc", "post-rewrite"
+
+  -n  Name of remote repository.
