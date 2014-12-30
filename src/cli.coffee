@@ -22,14 +22,12 @@ usage = (entry, message) ->
   if message?
     process.stderr.write "#{message}\n"
 
-  process.stderr.write( read( resolve( __dirname, "..", "doc", entry ) ) )
-  process.exit -1
+  throw read( resolve( __dirname, "..", "doc", entry ) )
 
 # Accept only the allowed values for flags that take an enumerated type.
 allow_only = (allowed_values, value, flag) ->
   if allowed_values.indexOf(value) == -1
-    process.stderr.write "\nError: Only Allowed Values May Be Specified For Flag: #{flag}\n\n"
-    process.exit -1
+    throw "\nError: Only Allowed Values May Be Specified For Flag: #{flag}\n\n"
 
 #===============================================================================
 # Parsing Functions
@@ -102,7 +100,7 @@ parse_push_arguments = (argv) ->
   options = {}
 
   # Establish an array of flags that *must* be found for this method to succeed.
-  required_flags = ["-h", "-n"]
+  required_flags = ["-g", "-n"]
 
   # Loop over arguments.  Collect settings and validate where possible.
   argv = argv[1..]
@@ -112,7 +110,7 @@ parse_push_arguments = (argv) ->
       usage "push", "\nError: Flag Provided But Not Defined: #{argv[0]}\n"
 
     switch argv[0]
-      when "-h"
+      when "-g"
         allowed_values = ["applypatch-msg", "pre-applypatch", "post-applypatch",
         "pre-commit", "prepare-commit-msg", "commit-msg", "commit-msg", "post-commit",
         "pre-rebase", "post-checkout", "post-merge", "pre-push", "pre-receive",
@@ -120,7 +118,7 @@ parse_push_arguments = (argv) ->
 
         allow_only allowed_values, argv[1], argv[0]
         options.hook_name = argv[1]
-        remove required_flags, "-h"
+        remove required_flags, "-g"
       when "-n"
         options.repo_name = argv[1]
         remove required_flags, "-n"
@@ -151,7 +149,7 @@ parse_rm_arguments = (argv) ->
   options = {}
 
   # Establish an array of flags that *must* be found for this method to succeed.
-  required_flags = ["-h", "-n"]
+  required_flags = ["-g", "-n"]
 
   # Loop over arguments.  Collect settings and validate where possible.
   argv = argv[1..]
@@ -161,7 +159,7 @@ parse_rm_arguments = (argv) ->
       usage "rm", "\nError: Flag Provided But Not Defined: #{argv[0]}\n"
 
     switch argv[0]
-      when "-h"
+      when "-g"
         allowed_values = ["applypatch-msg", "pre-applypatch", "post-applypatch",
         "pre-commit", "prepare-commit-msg", "commit-msg", "commit-msg", "post-commit",
         "pre-rebase", "post-checkout", "post-merge", "pre-push", "pre-receive",
@@ -169,7 +167,7 @@ parse_rm_arguments = (argv) ->
 
         allow_only allowed_values, argv[1], argv[0]
         options.hook_name = argv[1]
-        remove required_flags, "-h"
+        remove required_flags, "-g"
       when "-n"
         options.repo_name = argv[1]
         remove required_flags, "-n"

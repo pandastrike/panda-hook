@@ -8,7 +8,6 @@
 #====================
 {resolve} = require "path"
 {read, write, remove} = require "fairmont" # Easy file read/write
-async = (require "when/generator").lift   # Makes resuable generators.
 
 coreos = require "./coreos"
 
@@ -19,14 +18,12 @@ usage = (entry, message) ->
   if message?
     process.stderr.write "#{message}\n"
 
-  process.stderr.write( read( resolve( __dirname, "doc", entry ) ) )
-  process.exit -1
+  throw read( resolve( __dirname, "doc", entry ) )
 
 # Accept only the allowed values for flags that take an enumerated type.
 allow_only = (allowed_values, value, flag) ->
   if allowed_values.indexOf(value) == -1
-    process.stderr.write "\nError: Only Allowed Values May Be Specified For Flag: #{flag}\n\n"
-    process.exit -1
+    throw "\nError: Only Allowed Values May Be Specified For Flag: #{flag}\n\n"
 
 #===============================================================================
 # Parsing Functions
@@ -36,15 +33,16 @@ allow_only = (allowed_values, value, flag) ->
 #------------------------
 parse_restart_arguments = (argv) ->
   # Deliver an info blurb if neccessary.
-  if argv.length == 1 or argv[1] == "help"
+  if argv.length == 1 or argv[1] == "-h" or argv[1] == "help"
     usage "restart"
 
   # Begin buliding the "options" object.
   options = {}
   options.services = []
+  options.command = "restart"
 
   # Establish an array of flags that *must* be found for this method to succeed.
-  required_flags = ["-h", "-n", "-s"]
+  required_flags = ["-g", "-n", "-s"]
 
   # Loop over arguments.  Collect settings and validate where possible.
   argv = argv[1..]
@@ -54,7 +52,7 @@ parse_restart_arguments = (argv) ->
       usage "restart", "\nError: Flag Provided But Not Defined: #{argv[0]}\n"
 
     switch argv[0]
-      when "-h"
+      when "-g"
         allowed_values = ["applypatch-msg", "pre-applypatch", "post-applypatch",
         "pre-commit", "prepare-commit-msg", "commit-msg", "commit-msg", "post-commit",
         "pre-rebase", "post-checkout", "post-merge", "pre-push", "pre-receive",
@@ -62,7 +60,7 @@ parse_restart_arguments = (argv) ->
 
         allow_only allowed_values, argv[1], argv[0]
         options.hook = argv[1]
-        remove required_flags, "-h"
+        remove required_flags, "-g"
       when "-n"
         options.repo = argv[1]
         remove required_flags, "-n"
@@ -86,7 +84,7 @@ parse_restart_arguments = (argv) ->
 # Top-Level Command-Line Parsing
 #===============================================================================
 module.exports =
-  parse_module: async (config, argv) ->
+  parse_module: (config, argv) ->
     # Check the command arguments.  Deliver an info blurb if needed.
     if argv.length == 0 or argv[0] == "help"
       usage "main"
@@ -95,7 +93,7 @@ module.exports =
     switch argv[0]
       when "restart"
         options = parse_restart_arguments argv
-        coreos.restart config, options
+        coreos.main config, options
       else
         # When the module cannot be identified, display the help guide.
         usage "main", "\nError: Sub-Command Not Found: #{argv[0]} \n"

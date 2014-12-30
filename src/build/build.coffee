@@ -13,8 +13,6 @@
 #====================
 # Modules
 #====================
-async = (require "when/generator").lift   # Makes resuable generators.
-
 coreos = require "./coreos/coreos"
 
 #====================
@@ -26,8 +24,7 @@ coreos = require "./coreos/coreos"
 # Module Definition
 #===============================
 module.exports =
-  main: async (config, options) ->
-
+  main: (config, options) ->
     # Continue on to the specified module.
     switch options.build_module
       when "coreos"

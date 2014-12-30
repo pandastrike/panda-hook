@@ -8,7 +8,6 @@
 #====================
 {resolve} = require "path"
 {read, write, remove} = require "fairmont" # Easy file read/write
-async = (require "when/generator").lift   # Makes resuable generators.
 
 coreos = require "./coreos/cli"
 
@@ -20,8 +19,7 @@ usage = (entry, message) ->
   if message?
     process.stderr.write "#{message}\n"
 
-  process.stderr.write( read( resolve( __dirname, "doc", entry ) ) )
-  process.exit -1
+  throw read( resolve( __dirname, "doc", entry ) )
 
 
 #===============================================================================
@@ -30,7 +28,7 @@ usage = (entry, message) ->
 module.exports =
 
   # Sorts Command-Line input for build command.
-  parse_module: async (config, argv) ->
+  parse_module: (config, argv) ->
     # Check the command arguments.  Deliver an info blurb if needed.
     if argv.length == 0 or argv[0] == "help" or argv[0] == "-h"
       usage "build"

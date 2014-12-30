@@ -7,7 +7,7 @@ Push places a githook script into the specified bare repo on the hook-server.
 These are executable scripts in the "hooks" directory.
 
 Required:
-  -h  Name of githook script.  This name informs git when to activate the githook
+  -g  Name of githook script.  This name informs git when to activate the githook
         after it has been placed into the hook-server. It is also the file-name of the
         generated script. It will be placed into the "hooks" directory of the
         remote, bare repository

@@ -8,7 +8,7 @@ on the CoreOS cluster. One or more services may be specified after naming the ta
 repository.
 
 Required:
-  -h  Hook-Type.  This name informs git when to activate the githook after it
+  -g  Hook-Type.  This name informs git when to activate the githook after it
         has been placed into the hook-server. It is also the file-name of the
         generated script. The generated file is placed into the working directory.
 

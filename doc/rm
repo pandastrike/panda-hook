@@ -7,7 +7,7 @@ rm deletes a githook script into the specified bare repo on the hook-server.
 These are executable scripts located in the "hooks" directory.
 
 Required:
-  -h  Name of githook script.
+  -g  Name of githook script.
 
         Allowed Values:
         "applypatch-msg", "pre-applypatch", "post-applypatch", "pre-commit",

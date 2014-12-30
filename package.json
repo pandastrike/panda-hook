@@ -1,6 +1,6 @@
 {
   "name": "pandahook",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Githook Script Management Made Easy",
   "main": "src/cli.coffee",
   "bin": {
@@ -27,7 +27,6 @@
   "dependencies": {
     "c50n": "^0.7.1",
     "fairmont": "^0.8.2",
-    "shelljs": "^0.3.0",
-    "when": "^3.6.4"
+    "shelljs": "^0.3.0"
   }
 }
