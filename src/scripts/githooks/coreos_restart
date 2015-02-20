@@ -53,6 +53,6 @@ echo "-----------"
 # Finally, bring the service(s) back online.
 for service in ${services[@]};
 do
-  scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -r $service {{{cluster_address}}}:/home/core/launch/
+  scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -r $service {{{cluster_address}}}:/home/core/launch
   /usr/bin/ssh -A -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" {{{cluster_address}}} "/usr/bin/fleetctl start launch/$service${service::-1}.service"
 done
