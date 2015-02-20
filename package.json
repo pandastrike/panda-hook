@@ -1,17 +1,17 @@
 {
-  "name": "pandahook",
+  "name": "panda-hook",
   "version": "0.1.7",
   "description": "Githook Script Management Made Easy",
   "main": "src/cli.coffee",
   "bin": {
-    "pandahook": "./bin/pandahook"
+    "panda-hook": "./bin/panda-hook"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/pandastrike/PandaHook.git"
+    "url": "https://github.com/pandastrike/panda-hook.git"
   },
   "keywords": [
     "githook",
@@ -21,12 +21,13 @@
   "author": "David Harper",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pandastrike/PandaHook/issues"
+    "url": "https://github.com/pandastrike/panda-hook/issues"
   },
-  "homepage": "https://github.com/pandastrike/PandaHook",
+  "homepage": "https://github.com/pandastrike/panda-hook",
   "dependencies": {
     "c50n": "^0.7.1",
     "fairmont": "^0.8.2",
+    "mustache": "^1.1.0",
     "shelljs": "^0.3.0"
   }
 }

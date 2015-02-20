@@ -24,11 +24,11 @@ coreos = require "./coreos/coreos"
 # Module Definition
 #===============================
 module.exports =
-  main: (config, options) ->
+  main: (options) ->
     # Continue on to the specified module.
     switch options.build_module
       when "coreos"
-        coreos.main config, options
+        coreos.main options
       else
         # When the module cannot be identified, throw error.
         throw "Error: Build Module Not Found: #{options.build_module}"

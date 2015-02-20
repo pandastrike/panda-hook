@@ -1,0 +1,80 @@
+# This function merges the specifications of a single template with "common data",
+# like public SSH keys.  This keeps the user from having to specify data redudantly.
+# However, this merge is overriden if the user specifies one of the keys that is auto-handled.
+reconcile_specifications = (config, options) ->
+  # Add shared data to this section of the template as a default.
+  unless config.public_keys?
+    config.public_keys = options.public_keys
+  unless config.kick_address?
+    config.kick_address = "kick.#{regularly_qualified options.private_domain}:2000"
+
+  # Determine the correct CoreOS environmental variable to apply.
+  if config.hostname?
+    if get_hosted_zone_name( config.hostname) == options.public_domain
+      config.ip_address = "${COREOS_PUBLIC_IPV4}"
+    else
+      config.ip_address = "${COREOS_PRIVATE_IPV4}"
+
+  return config
+
+# Helper function to determine the source of a given service file.  Are they coming from
+# the panda-cluster library, or are they custom user services. Thankfully, we can tell pretty
+# easily because panda-cluster services are prefixed with "pc-".
+get_root_directory = (name) ->
+  name = dashed plain_text name
+  split_name = name.split "-"
+
+  if split_name[0] == "pc"
+    return __dirname
+  else
+    return process.cwd()
+
+# Helper function that places a rendered service template on the cluster.
+place_service_unit = async (name, hostname, root_directory) ->
+  name = dashed plain_text name
+  # Place a copy of the customized unit file on the cluster.
+  command =
+    "scp -o \"StrictHostKeyChecking no\" -o \"UserKnownHostsFile=/dev/null\" " +
+    "-r #{root_directory}/launch/#{name} " +
+    "core@#{hostname}:/home/core/launch"
+
+  yield execute command
+
+# Helper function that launches a single unit located on the cluster.
+launch_service_unit = async (name, hostname) ->
+  try
+    name = dashed plain_text name
+
+    command =
+      "ssh -A -o \"StrictHostKeyChecking no\" -o \"LogLevel=quiet\" -o \"UserKnownHostsFile=/dev/null\" " +
+      "core@#{hostname} << EOF\n" +
+      "fleetctl start launch/#{name}/#{name}.service \n" +
+      "EOF"
+
+    return build_success "Service #{name} launched.", yield execute command
+
+  catch error
+    console.log error
+    return build_error "Unable to launch service unit.", error
+
+
+# Launch all services listed in the config file.
+launch_services = async (options, creds) ->
+  try
+    for unit of options.service_templates
+      console.log "Launching #{unit}"
+      config = options.service_templates[unit]
+
+      # We wish to only render templates for units that have variables specified.
+      if config != null
+        config = reconcile_specifications config, options
+        root_directory = get_root_directory unit
+        yield render_service_template unit, config, root_directory
+        yield place_service_unit unit, options.hostname, root_directory
+
+      # Launch into the cluster.
+      yield launch_service_unit unit, options.hostname
+
+  catch error
+    console.log error
+    return build_error "Unable to install hook-server into cluster.", error

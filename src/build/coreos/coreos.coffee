@@ -15,11 +15,11 @@ module.exports =
 
   # When this library is accessed programatically, this method used for standardized
   # access.  Other methods are called from here.
-  main: (config, options) ->
+  main: (options) ->
     # Continue on to the specified command.
     switch options.command
       when "restart"
-        restart config, options
+        restart options
       else
         # When the command cannot be identified, throw error.
         throw "Error: Sub-Command Not Found in CoreOS Build Module: #{options.command}"

@@ -1,30 +1,34 @@
 # This Bash script adds a bare repository on the remote server.
 # $1 = Hook Server Address
-# $2 = Repository Name
+# #2 = Hook Server Port
+# $3 = Repository Name
 
 # First, check to make sure a directory with that name doesn't already exist.
-ssh $1 /usr/bin/bash << EOF
-  if [ -d "$2.git" ]; then
+ssh -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -p $2 $1 /usr/bin/bash << EOF
+  cd /root/repos
+
+  if [ -d "$3.git" ]; then
     echo ""
-    echo "WARNGING: A directory named $2.git has been detected.  Overwriting."
+    echo "WARNGING: A directory named $3.git has been detected.  Overwriting."
     echo ""
-    rm -rf "$2.git"
+    rm -rf "$3.git"
   fi
 
   # Now, create the repository.
-  mkdir $2.git
-  cd $2.git
+  mkdir $3.git
+  cd $3.git
   /usr/bin/git init --bare
 EOF
 
 echo ""
-echo "The bare repo \"$2.git\" has been successfully created"
+echo "The bare repo \"$3.git\" has been successfully created"
 echo "and is now ready to accept githooks."
 echo ""
 
 # Also, add a "hook" alias for this remote repo to the local git repo.
 git remote rm hook
-git remote add hook $1:$2.git
+git remote add hook ssh://$1:$2/root/repos/$3.git
+
 echo ""
 echo "This remote repo is now available under the alias \"hook\"."
 echo "Run \"git remote -v\" to examine. "

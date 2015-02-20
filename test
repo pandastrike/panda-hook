@@ -1,0 +1,5 @@
+if [ ! $2 ]; then
+  echo "It's not there"
+else
+  echo "It's here!"
+fi
