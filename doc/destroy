@@ -1,5 +1,5 @@
 --------------------------------------------
-Usage: pandahook destroy REPO-NAME
+Usage: pandahook destroy [args..]
 --------------------------------------------
 Follow any command with "help" for more information.
 
@@ -8,4 +8,7 @@ Destroy accepts the details necessary to find and delete the bare repo on the ho
 You must provide the name of the remote repository.  Both the bare repo (bearing
 the suffix *.git) and its regular clone (if present) are deleted.
 
-REPO-NAME    format: string
+Required:
+  -n  Name of remote repository.
+
+  -s  Target hook-server address. Defaults to port 22.

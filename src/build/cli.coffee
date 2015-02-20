@@ -28,7 +28,7 @@ usage = (entry, message) ->
 module.exports =
 
   # Sorts Command-Line input for build command.
-  parse_module: (config, argv) ->
+  parse_module: (argv) ->
     # Check the command arguments.  Deliver an info blurb if needed.
     if argv.length == 0 or argv[0] == "help" or argv[0] == "-h"
       usage "build"
@@ -36,7 +36,7 @@ module.exports =
     # Now, look for module references.
     switch argv[0]
       when "coreos"
-        coreos.parse_module config, argv[1..]
+        coreos.parse_module argv[1..]
       else
         # When the module cannot be identified, display the help guide.
         usage "build", "\nError: Build Module Not Found: #{argv[0]} \n"

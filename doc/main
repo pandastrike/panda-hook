@@ -1,12 +1,12 @@
 --------------------------------------------
-Usage: pandahook COMMAND [arg...]
+Usage: pandahook COMMAND [args...]
 --------------------------------------------
 Follow any command with "help" for more information.
 
 A tool to manage githook scripts and deploy them to your hook-server.
 
 Commands:
-   build     Generates a githook script
+   ~build~ Generates a githook script
    create    Clones a remote, bare repo on the hook-server
    destroy   Deletes a remote repo from the hook-server
    push      Adds the specified githook script to remote repo on the hook-server

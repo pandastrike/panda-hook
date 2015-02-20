@@ -42,7 +42,7 @@ parse_restart_arguments = (argv) ->
   options.command = "restart"
 
   # Establish an array of flags that *must* be found for this method to succeed.
-  required_flags = ["-g", "-n", "-s"]
+  required_flags = ["-c", "-g", "-n", "-t"]
 
   # Loop over arguments.  Collect settings and validate where possible.
   argv = argv[1..]
@@ -52,6 +52,9 @@ parse_restart_arguments = (argv) ->
       usage "restart", "\nError: Flag Provided But Not Defined: #{argv[0]}\n"
 
     switch argv[0]
+      when "-c"
+        options.coreos_address = argv[1]
+        remove required_flags, "-c"
       when "-g"
         allowed_values = ["applypatch-msg", "pre-applypatch", "post-applypatch",
         "pre-commit", "prepare-commit-msg", "commit-msg", "commit-msg", "post-commit",
@@ -59,15 +62,14 @@ parse_restart_arguments = (argv) ->
         "update", "post-receive", "post-update", "pre-auto-gc", "post-rewrite"]
 
         allow_only allowed_values, argv[1], argv[0]
-        options.hook = argv[1]
+        options.hook_name = argv[1]
         remove required_flags, "-g"
       when "-n"
-        options.repo = argv[1]
+        options.repo_name = argv[1]
         remove required_flags, "-n"
-      when "-s"
-        options.services.push argv[1]
-        unless required_flags.indexOf("-s") == -1
-          remove required_flags, "-s"
+      when "-t"
+        options.target_directory = argv[1]
+        remove required_flags, "-t"
       else
         usage "restart", "\nError: Unrecognized Flag Provided: #{argv[0]}\n"
 
@@ -84,7 +86,7 @@ parse_restart_arguments = (argv) ->
 # Top-Level Command-Line Parsing
 #===============================================================================
 module.exports =
-  parse_module: (config, argv) ->
+  parse_module: (argv) ->
     # Check the command arguments.  Deliver an info blurb if needed.
     if argv.length == 0 or argv[0] == "help"
       usage "main"
@@ -93,7 +95,8 @@ module.exports =
     switch argv[0]
       when "restart"
         options = parse_restart_arguments argv
-        coreos.main config, options
+        options.services = ["foo", "bar"]
+        coreos.main options
       else
         # When the module cannot be identified, display the help guide.
         usage "main", "\nError: Sub-Command Not Found: #{argv[0]} \n"

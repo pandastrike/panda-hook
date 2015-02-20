@@ -1,5 +1,5 @@
 -------------------------------------------------------
-Usage: pandahook build coreos restart -h HOOK-TYPE  -n REPOSITORY -s SERVICE [-s SERVICE]
+Usage: pandahook build coreos restart [args..]
 -------------------------------------------------------
 Follow any command with "help" for more information.
 
@@ -8,6 +8,8 @@ on the CoreOS cluster. One or more services may be specified after naming the ta
 repository.
 
 Required:
+  -c  Target cluster address.  Defaults to port 22.
+
   -g  Hook-Type.  This name informs git when to activate the githook after it
         has been placed into the hook-server. It is also the file-name of the
         generated script. The generated file is placed into the working directory.
@@ -20,15 +22,7 @@ Required:
 
   -n  Remote Repository Name.
 
-  -s  Service Name. Services are specified by name only (without the .service
-        suffix).  Template service files must include the "@" suffix.  At least
-        one service must be specified.  Additional services may be specified by
-        using additional "-s" flags.
-
-        Example Service Designations
-        ----------------------------------
-        test    => test.service
-        test@02 => test@02.service
+  -t  Target directory to  
 
 
 

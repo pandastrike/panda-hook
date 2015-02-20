@@ -1,5 +1,5 @@
 --------------------------------------------
-Usage: pandahook push -n REPO-NAME -h SCRIPT-NAME
+Usage: pandahook push [args..]
 --------------------------------------------
 Follow any command with "help" for more information.
 
@@ -7,10 +7,20 @@ Push places a githook script into the specified bare repo on the hook-server.
 These are executable scripts in the "hooks" directory.
 
 Required:
-  -g  Name of githook script.  This name informs git when to activate the githook
-        after it has been placed into the hook-server. It is also the file-name of the
-        generated script. It will be placed into the "hooks" directory of the
-        remote, bare repository
+  -c  Target cluster address.  Defaults to port 22.
+
+  -n  Name of remote repository.
+
+  -s  Target hook-server address. Defaults to port 22.
+
+-----------------------------------------------------------
+Optional:
+  -a  Source of githook script.  Defaults to panda-hook/src/scripts/githooks/coreos_restart
+
+  -g  Name of githook script.  Defaults to post-receive, one of the most common.
+        This name informs git when to activate the githook after it has been placed
+        into the hook-server. It is also the file-name of the generated script.
+        It will be placed into the "hooks" directory of the remote, bare repository.
 
         Allowed Values:
         "applypatch-msg", "pre-applypatch", "post-applypatch", "pre-commit",
@@ -18,4 +28,5 @@ Required:
         "pre-rebase", "post-checkout", "post-merge", "pre-push", "pre-receive",
         "update", "post-receive", "post-update", "pre-auto-gc", "post-rewrite"
 
-  -n  Name of remote repository.
+  -t  Relatvive path to target directory to scan for service names.
+        This defaults to "launch"
