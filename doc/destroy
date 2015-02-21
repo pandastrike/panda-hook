@@ -12,3 +12,4 @@ Required:
   -n  Name of remote repository.
 
   -s  Target hook-server address. Defaults to port 22.
+      Example:  <user>@<host_address>:<port>

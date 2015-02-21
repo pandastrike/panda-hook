@@ -60,7 +60,7 @@ parse_create_arguments = (argv) ->
         options.repo_name = argv[1]
         remove required_flags, "-n"
       when "-s"
-        options.hook_server = argv[1]
+        options.hook_address = argv[1]
         remove required_flags, "-s"
       else
         usage "create", "\nError: Unrecognized Flag Provided: #{argv[0]}\n"
@@ -101,7 +101,7 @@ parse_destroy_arguments = (argv) ->
         options.repo_name = argv[1]
         remove required_flags, "-n"
       when "-s"
-        options.hook_server = argv[1]
+        options.hook_address = argv[1]
         remove required_flags, "-s"
       else
         usage "destroy", "\nError: Unrecognized Flag Provided: #{argv[0]}\n"
@@ -156,7 +156,7 @@ parse_push_arguments = (argv) ->
         options.repo_name = argv[1]
         remove required_flags, "-n"
       when "-s"
-        options.hook_server = argv[1]
+        options.hook_address = argv[1]
         remove required_flags, "-s"
       when "-t"
         options.launch_path = argv[1]
@@ -210,7 +210,7 @@ parse_rm_arguments = (argv) ->
         options.repo_name = argv[1]
         remove required_flags, "-n"
       when "-s"
-        options.hook_server = argv[1]
+        options.hook_address = argv[1]
         remove required_flags, "-s"
       else
         usage "rm", "\nError: Unrecognized Flag Provided: #{argv[0]}\n"

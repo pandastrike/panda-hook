@@ -25,9 +25,14 @@ prepare_template = (options) ->
   options.launch_path ||= "launch"
 
   # Parse Port Info for Hook Server
-  temp = options.hook_server.split(":")
-  options.hook_server = temp[0]
-  options.hook_port = temp[1] || "22"
+  result = options.hook_address.split(":")
+  options.hook_address = result[0]
+  options.hook_port = result[1] || "22"
+
+  # Parse Port Info for Main Cluster Instance.
+  result = options.cluster_address.split(":")
+  options.cluster_address = result[0]
+  options.cluster_port = result[1] || "22"
 
   # Render Template
   path = resolve __dirname, options.hook_source
@@ -55,29 +60,29 @@ module.exports =
 
   # This method clones a bare repo on the hook-server.
   create: (options) ->
-    exec "bash #{__dirname}/scripts/create #{options.hook_server} #{options.hook_port} #{options.repo_name}"
+    exec "bash #{__dirname}/scripts/create #{options.hook_address} #{options.hook_port} #{options.repo_name}"
 
   # This method deletes the specified repo from the hook-server.
   destroy: (options) ->
-    exec "bash #{__dirname}/scripts/destroy #{options.hook_server} #{options.hook_port} #{options.repo_name}"
+    exec "bash #{__dirname}/scripts/destroy #{options.hook_address} #{options.hook_port} #{options.repo_name}"
 
   # This method places a githook script into a remote repo.
   push: (options) ->
     # Generate default CoreOS post-receive githook, unless given another source.
     options = prepare_template options
 
-    exec "bash #{__dirname}/scripts/push #{options.hook_server} #{options.hook_port} #{options.repo_name} #{options.hook_name}",
+    exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source}",
       {async: false},
       (code, output) ->
         if code == 1
           # The "push" Bash script cannot add a githook if the repo does not exist.
           # Create it now, then try to push again.
-          exec "bash #{__dirname}/scripts/create #{options.hook_server} #{options.hook_port} #{options.repo_name}"
-          exec "bash #{__dirname}/scripts/push #{options.hook_server} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source}"
+          exec "bash #{__dirname}/scripts/create #{options.hook_address} #{options.hook_port} #{options.repo_name}"
+          exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source}"
 
   # This method deletes a githook script from a remote repo.
   rm: (options) ->
-    exec "bash #{__dirname}/scripts/rm #{options.hook_server} #{options.hook_port} #{options.repo_name} #{options.hook_name}",
+    exec "bash #{__dirname}/scripts/rm #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name}",
       async:false,
       (code, output) ->
         if code == 1

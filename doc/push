@@ -8,10 +8,12 @@ These are executable scripts in the "hooks" directory.
 
 Required:
   -c  Target cluster address.  Defaults to port 22.
+      Example:  <user>@<host_address>:<port>
 
   -n  Name of remote repository.
 
   -s  Target hook-server address. Defaults to port 22.
+      Example:  <user>@<host_address>:<port>
 
 -----------------------------------------------------------
 Optional:

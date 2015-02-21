@@ -37,7 +37,7 @@ cd {{{launch_path}}}
 services=(*/)
 for service in ${services[@]};
 do
-  /usr/bin/ssh -A -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" {{{cluster_address}}} "/usr/bin/fleetctl destroy ${service::-1}.service"
+  /usr/bin/ssh -A -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -p {{{cluster_port}}} {{{cluster_address}}} "/usr/bin/fleetctl destroy ${service::-1}.service"
 done
 
 # It sometimes takes the CoreOS cluster a moment to register your command.  If
@@ -53,6 +53,8 @@ echo "-----------"
 # Finally, bring the service(s) back online.
 for service in ${services[@]};
 do
-  scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -r $service {{{cluster_address}}}:/home/core/launch
-  /usr/bin/ssh -A -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" {{{cluster_address}}} "/usr/bin/fleetctl start launch/$service${service::-1}.service"
+  # Delete the current launch directory if it stands in our way.
+  /usr/bin/ssh -A -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -p {{{cluster_port}}} {{{cluster_address}}} "sudo rm -rf launch/$service"
+  scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -P {{{cluster_port}}} -r $service {{{cluster_address}}}:/home/core/launch/
+  /usr/bin/ssh -A -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -p {{{cluster_port}}} {{{cluster_address}}} "/usr/bin/fleetctl start launch/$service${service::-1}.service"
 done
