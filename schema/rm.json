@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Panda-Hook rm",
+  "description": "This is the configuation object panda-hook needs to delete single githook from a bare repo on the hook-server.",
+  "type": "object",
+  "properties": {
+    "hook_name": {
+      "description": "The name of the githook to be manipulated.",
+      "type": "string",
+      "enum": ["applypatch-msg", "pre-applypatch", "post-applypatch",
+        "pre-commit", "prepare-commit-msg", "commit-msg", "commit-msg", "post-commit",
+        "pre-rebase", "post-checkout", "post-merge", "pre-push", "pre-receive",
+        "update", "post-receive", "post-update", "pre-auto-gc", "post-rewrite"]
+    },
+    "repo_name": {
+      "description": "The name of the repository to be manipulated on the hook server.",
+      "type": "string"
+    },
+    "hook_address": {
+      "description": "The hostname of the hook-server.  Must specify user and port if not 22. <user>@<host_address>:<port>",
+      "type": "string"
+    },
+  },
+  "additionalProperties": false,
+  "required": ["hook_name", "repo_name", "hook_address"]
+}
