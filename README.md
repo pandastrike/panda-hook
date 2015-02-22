@@ -3,6 +3,8 @@ panda-hook
 
 ### The Ultimate Tool to Manage and Deploy Githook Scripts.
 
+> **Warning:** This is an experimental project under heavy development.  It's awesome and becoming even more so, but it is a work in progress.
+
 ---
 Githooks are powerful tools.  Whatever you can script can be triggered from nothing but a git command.  PandaHook helps you manage this magic.
 
@@ -34,7 +36,7 @@ If you would like to install panda-hook as a library and programmatically access
 See [api-guide.md][2] for more information on programatic access.
 
 ## Usage Example
-To see panda-hook in action, please see the Huxley "flavor" examples.  The simplest *Hello World* example is [vanilla][3], so that's a good place to start. 
+To see panda-hook in action, please see the Huxley "flavor" examples.  The simplest *Hello World* example is [vanilla][3], so that's a good place to start.
 
 [1]:https://github.com/pandastrike/panda-hook/blob/master/command-line-guide.md
 [2]:https://github.com/pandastrike/panda-hook/blob/master/api-guide.md
