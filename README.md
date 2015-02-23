@@ -20,9 +20,7 @@ npm install -g coffee-script
 ### Command-Line Tool
 If you'd like to use PandaHook's command-line tool on your local machine, install it globally.
 ```shell
-git clone https://github.com/pandastrike/panda-hook.git panda-hook
-cd panda-hook
-npm install -g .
+npm install -g pandastrike/panda-hook 
 ```
 This gives you a symlinked executable to invoke on your command-line. See [command-line-guide.md][1] for more information on this executable.
 
@@ -30,7 +28,7 @@ This gives you a symlinked executable to invoke on your command-line. See [comma
 If you would like to install panda-hook as a library and programmatically access its methods, install it locally to your project.  Place this line in the "dependencies" object of your project's `package.json` file.
 
 ```json
-"panda-hook": "git://github.com/pandastrike/panda-hook.git"
+npm install pandastrike/panda-hook --save
 ```
 
 See [api-guide.md][2] for more information on programatic access.
