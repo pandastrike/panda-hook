@@ -2,7 +2,7 @@
   "name": "panda-hook",
   "version": "0.1.7",
   "description": "Githook Script Management Made Easy",
-  "main": "src/cli.coffee",
+  "main": "src/panda-hook.coffee",
   "bin": {
     "panda-hook": "./bin/panda-hook"
   },

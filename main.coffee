@@ -1,1 +1,1 @@
-module.exports = require "./src/pandahook"
+module.exports = require "./src/panda-hook"
