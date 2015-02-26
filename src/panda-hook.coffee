@@ -69,7 +69,6 @@ module.exports =
   # This method places a githook script into a remote repo.
   push: (options) ->
     # Generate default CoreOS post-receive githook, unless given another source.
-    options = prepare_template options
     console.log options
     exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source}",
       {async: false},
