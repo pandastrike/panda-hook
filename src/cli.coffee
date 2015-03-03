@@ -59,6 +59,8 @@ parse_create_arguments = (argv) ->
       when "-n"
         options.repo_name = argv[1]
         remove required_flags, "-n"
+      when "-r"
+        options.remote_alias = argv[1]
       when "-s"
         options.hook_address = argv[1]
         remove required_flags, "-s"
@@ -155,6 +157,8 @@ parse_push_arguments = (argv) ->
       when "-n"
         options.repo_name = argv[1]
         remove required_flags, "-n"
+      when "-r"
+        options.remote_alias = argv[1]
       when "-s"
         options.hook_address = argv[1]
         remove required_flags, "-s"

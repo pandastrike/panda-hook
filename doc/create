@@ -13,3 +13,8 @@ Required:
 
   -s  Target hook-server address. Defaults to port 22.
       Example:  <user>@<host_address>:<port>
+
+--------------------------------------------------------------------------------
+Optional:
+
+  -r The remote repository's alias in "git remote".  Defaults to "hook".

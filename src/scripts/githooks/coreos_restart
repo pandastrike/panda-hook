@@ -15,16 +15,23 @@ echo "Push Detected. Activating Githook."
 echo "==================================="
 
 # Cloning the (freshly updated) bare repo creates a regular one with files we can use.
-# First, wipe away any old versions of the regular repo.  Note that our starting directory
-# is the repo's root, not the path of the githook script.
+# Note that our starting directory is the repo's root, not the path of the githook script.
 echo ""
 echo "-----------"
 echo "Cloning Bare Repo"
 echo "-----------"
+
+# First, determine the branch being pushed and checkout that one.  That information is available
+# from the standard input.
+read old_hash new_hash branch_name
+branch_name=${branch_name:11}
+
+# Next, wipe away any old versions of the regular repo and clone from the updated bare repo.
 cd ..
 rm -rf {{{repo_name}}}
-/usr/bin/git clone {{{repo_name}}}.git {{{repo_name}}}
+/usr/bin/git clone -b $branch_name {{{repo_name}}}.git  {{{repo_name}}}
 cd {{{repo_name}}}
+
 
 echo ""
 echo "-----------"

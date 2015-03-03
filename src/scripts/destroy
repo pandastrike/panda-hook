@@ -13,10 +13,3 @@ echo ""
 echo "The bare repo \"$3.git\" and its clone have been"
 echo "successfully deleted from the hook-server."
 echo ""
-
-# Also, remove the "hook" alias for repo we just destroyed.
-git remote rm hook
-echo ""
-echo "WARNING: This command removes the \"hook\" alias from this local repository."
-echo "Run \"git remote -v\" to examine. "
-echo ""

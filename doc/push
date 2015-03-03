@@ -30,5 +30,7 @@ Optional:
         "pre-rebase", "post-checkout", "post-merge", "pre-push", "pre-receive",
         "update", "post-receive", "post-update", "pre-auto-gc", "post-rewrite"
 
+  -r The remote repository's alias in "git remote".  Defaults to "hook".
+
   -t  Relatvive path to target directory to scan for service names.
         This defaults to "launch"

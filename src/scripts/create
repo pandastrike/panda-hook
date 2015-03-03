@@ -2,6 +2,7 @@
 # $1 = Hook Server Address
 # #2 = Hook Server Port
 # $3 = Repository Name
+# $4 = Remote Git Alias
 
 # First, check to make sure a directory with that name doesn't already exist.
 ssh -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -p $2 $1 /usr/bin/bash << EOF
@@ -25,11 +26,11 @@ echo "The bare repo \"$3.git\" has been successfully created"
 echo "and is now ready to accept githooks."
 echo ""
 
-# Also, add a "hook" alias for this remote repo to the local git repo.
-git remote rm hook
-git remote add hook ssh://$1:$2/root/repos/$3.git
+# Also, add an alias for this remote repo to the local git repo.
+git remote rm $4
+git remote add $4 ssh://$1:$2/root/repos/$3.git
 
 echo ""
-echo "This remote repo is now available under the alias \"hook\"."
+echo "This remote repo is now available under the alias \"$4\"."
 echo "Run \"git remote -v\" to examine. "
 echo ""
