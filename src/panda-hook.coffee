@@ -18,11 +18,19 @@ builder = require "./build/build"         # Githook Script Generator
 # Helpers
 #===============================
 # This fucntion enforces configuration defaults if no value is provided.
+# file_fields array is used to loop quickly push and remove files
+file_fields = [ "hook", "hook_bootstrap", "hook_package_json", "hook_templatize" ]
 use_defaults = (options) ->
-  options.hook_source   ||= "scripts/githooks/coreos_restart"
-  options.hook_name     ||= "post-receive"
+  options.hook_source   ||= "scripts/githooks/coreos_restart.coffee"
+  options.hook_name     ||= "post-receive.coffee"
   options.launch_path   ||= "launch"
   options.remote_alias  ||= "hook"
+  options.hook_bootstrap_source     ||= "scripts/githooks/coreos_restart.sh"
+  options.hook_bootstrap_name       ||= "post-receive"
+  options.hook_package_json_source  ||= "scripts/githooks/package.json"
+  options.hook_package_json_name    ||= "package.json"
+  options.hook_templatize_source    ||= "scripts/githooks/templatize.coffee"
+  options.hook_templatize_name      ||= "templatize.coffee"
 
   return options
 
@@ -78,20 +86,49 @@ module.exports =
     # Generate default CoreOS post-receive githook, unless given another source.
     options = prepare_template options
 
-    exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source} #{options.remote_alias}",
-      {async: false},
-      (code, output) ->
-        if code == 1
-          # The "push" Bash script cannot add a githook if the repo does not exist.
-          # Create it now, then try to push again.
-          exec "bash #{__dirname}/scripts/create #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.remote_alias}"
-          exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source} #{options.remote_alias}"
+    push_component = ({options, hook_component_name, hook_component_source}) ->
+      exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options[hook_component_name]} #{options[hook_component_source]} #{options.remote_alias}",
+        {async: false},
+        (code, output) ->
+          if code == 1
+            # The "push" Bash script cannot add a githook if the repo does not exist.
+            # Create it now, then try to push again.
+            exec "bash #{__dirname}/scripts/create #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.remote_alias}"
+            exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options[hook_component_name]} #{options[hook_component_source]} #{options.remote_alias}"
+
+    for file in file_fields
+      push_component
+        options: options
+        hook_component_name: "#{file}_name"
+        hook_component_source: "#{file}_source"
+
+#    exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source} #{options.remote_alias}",
+#      {async: false},
+#      (code, output) ->
+#        if code == 1
+#          # The "push" Bash script cannot add a githook if the repo does not exist.
+#          # Create it now, then try to push again.
+#          exec "bash #{__dirname}/scripts/create #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.remote_alias}"
+#          exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source} #{options.remote_alias}"
 
   # This method deletes a githook script from a remote repo.
   rm: (options) ->
-    exec "bash #{__dirname}/scripts/rm #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name}",
-      async:false,
-      (code, output) ->
-        if code == 1
-          # If the requested repo does not exist, warn the user.
-          process.stdout.write "\nWARNING: The repository \"#{options.repo_name}\" does not exist.\n\n"
+    rm_component = ({options, hook_component_name}) ->
+      exec "bash #{__dirname}/scripts/rm #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options[hook_component_name]}",
+        {async: false},
+        (code, output) ->
+          if code == 1
+            # If the requested repo does not exist, warn the user.
+            process.stdout.write "\nWARNING: The repository \"#{options.repo_name}\" does not exist.\n\n"
+
+    for file in file_fields
+      rm_component
+        options: options
+        hook_component_name: "#{file}_name"
+
+#    exec "bash #{__dirname}/scripts/rm #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name}",
+#      {async: false},
+#      (code, output) ->
+#        if code == 1
+#          # If the requested repo does not exist, warn the user.
+#          process.stdout.write "\nWARNING: The repository \"#{options.repo_name}\" does not exist.\n\n"
