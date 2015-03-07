@@ -4,7 +4,8 @@
 # $3 = Repository Name
 # $4 = Githook Name
 # $5 = Githook Source
-# $6 = Remote Git Alias
+# $6 = Githook Accessory Directory Path
+# $7 = Remote Git Alias
 
 # First, determine whether the specified repository exists.
 ssh -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -p $2 $1 /usr/bin/bash << EOF
@@ -22,14 +23,16 @@ fi
 
 # Otherwise, we may continue normally.
 scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -P $2 $5 $1:/root/repos/$3.git/hooks/$4
+ssh -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -A -p $2 $1 "cd /root/repos/$3.git/hooks && rm -rf coreos_restart/"
+scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -P $2 -r $6 $1:/root/repos/$3.git/hooks/coreos_restart
 ssh -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -A -p $2 $1 "cd /root/repos/$3.git/hooks; chmod +x $4"
 
 # Also, update the alias for this remote repo to the local git repo.
-git remote rm $6
-git remote add $6 ssh://$1:$2/root/repos/$3.git
+git remote rm $7
+git remote add $7 ssh://$1:$2/root/repos/$3.git
 
 echo ""
-echo "This remote repo is now available under the alias \"$6\"."
+echo "This remote repo is now available under the alias \"$7\"."
 echo "Run \"git remote -v\" to examine. "
 echo ""
 

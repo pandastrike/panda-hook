@@ -26,7 +26,7 @@
   "homepage": "https://github.com/pandastrike/panda-hook",
   "dependencies": {
     "c50n": "^0.7.1",
-    "fairmont": "^0.8.2",
+    "fairmont": "^1.0.0-alpha-04",
     "mustache": "^1.1.0",
     "shelljs": "^0.3.0"
   }

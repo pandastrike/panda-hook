@@ -15,36 +15,33 @@ fs = require "fs"
 
 Configurator = require "panda-config"           # -----------------
 {simple_render} = require "./templatize"
-{read_block, lines, times, readdir, shell, stat, sleep} = require "fairmont"
+{chdir, read, write, read_block, lines, times, readdir, shell, stat, sleep} = require "fairmont"
 
 # Third Party Libraries
 {call} = require "when/generator"
 {promise} = require "when"
 async = (require "when/generator").lift         # -----------------
 {exec} = require "shelljs"                      # command-line access
+{render} = require "mustache"
 
+repo_name = "{{{repo_name}}}"
 
-
-
-repo_path = "#{process.env.HOME}/repos/donuts"
+repo_path = "#{process.env.HOME}/repos/#{repo_name}"
 launch_path = repo_path + "/launch/"
 
 
 # fills in template with values, writes to file
-render_template_wrapper = async ({repo_name, component_name, template_filename, output_filename}) ->
+render_template_wrapper = async ({repo_name, component_name, template_filename, output_filename, branch_name}) ->
   template_path =  repo_path + "/launch/" + "#{component_name}/#{template_filename}"
-
-  # read in the default component.yaml (to make accessable as CSON)
-  configurator = Configurator.make
-    paths: [ repo_path ]
-    extension: ".yaml"
-  configuration = configurator.make name: "huxley"
-  yield configuration.load()
-
-  rendered_string = yield simple_render configuration.data, template_path
-  fs.writeFileSync (repo_path + "/launch/#{component_name}/#{output_filename}"), rendered_string
-  yield configuration.save()
-
+  template = yield read template_path
+  configuration_path = join repo_path, "huxley.yaml"
+  configuration = (require "js-yaml").safeLoad (yield read configuration_path)
+  configuration.branch_name = "master"
+  
+  rendered_string = render template, configuration
+  
+  yield write (resolve repo_path + "/launch/#{component_name}/#{output_filename}"), rendered_string
+  
 
 # ShellJS's "exec" command can run non-blocking, so we wrap it here with a promise to use with
 # generators.  Future iterations will probably include error handling refinements here.
@@ -74,12 +71,14 @@ call ->
   # Cloning the (freshly updated) bare repo creates a regular one with files we can use.
   # Note that our starting directory is the repo's root, not the path of the githook script.
   print_banner "Cloning Bare Repo"
-  [ignore..., branch_name] = times (read_block lines process.stdin), 3
-  yield branch_name
+
+  #[ignore..., branch_name] = times (read_block lines process.stdin), 3
+  #branch_name = yield branch_name
+  branch_name = "master"
 
   # Next, wipe away any old versions of the regular repo and clone from the updated bare repo.
   yield shell "rm -rf #{repo_path}"
-  yield shell "/usr/bin/git clone -b #{branch_name} #{process.env.HOME}/repos/donuts.git #{repo_path}"
+  yield shell "/usr/bin/git clone -b #{branch_name} -- #{process.env.HOME}/repos/#{repo_name}.git #{repo_path}"
 
 
   # Determine which services should be restarted by searching the regular repo's "launch"
@@ -106,12 +105,28 @@ call ->
       component_name: service
       template_filename: "#{service}.service.template"
       output_filename: "#{service}.service"
+      branch_name: branch_name
     yield render_template_wrapper
       component_name: service
       template_filename: "Dockerfile.template"
       output_filename: "Dockerfile"
+      branch_name: branch_name
 
-    yield shell "/usr/bin/ssh -A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p {{{cluster_port}}} {{{cluster_address}}} sudo rm -rf launch/#{service}"
-    yield shell "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P {{{cluster_port}}} -r #{repo_path}/launch/#{service} {{{cluster_address}}}:/home/core/launch/"
-    yield shell "/usr/bin/ssh -A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p {{{cluster_port}}} {{{cluster_address}}} /usr/bin/fleetctl start launch/#{service}/#{service}.service"
+
+  console.log "TAKE 5"
+  yield sleep 5000
+  try
+    #{stdout, stderr} = yield shell "(cd #{repo_path} && git status)"
+    {stdout, stderr} = yield shell "(git -C #{repo_path} add .)"
+    # yield shell "git commit -m 'rendered templates'"
+  catch error
+    console.log error
+  console.log {stdout, stderr}
+
+#  yield execute "cd /root/repos/#{repo_name} && GIT_WORK_TREE=/root/repos/#{repo_name} && echo $GIT_WORK_TREE >> git-dir && git add . && git commit -m 'rendered templates'"
+
+  for service in services
+    yield shell "/usr/bin/ssh -A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p {{{cluster_port}}} {{{cluster_address}}} sudo rm -rf prelaunch/#{service}"
+    yield shell "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P {{{cluster_port}}} -r #{repo_path}/launch/#{service} {{{cluster_address}}}:/home/core/prelaunch/"
+    yield shell "/usr/bin/ssh -A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p {{{cluster_port}}} {{{cluster_address}}} /usr/bin/fleetctl start prelaunch/#{service}/#{service}.service"
 

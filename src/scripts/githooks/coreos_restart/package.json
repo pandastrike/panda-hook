@@ -11,6 +11,7 @@
   "dependencies": {
     "c50n": "^0.7.2",
     "fairmont": "^1.0.0-alpha-04",
+    "js-yaml": "^3.2.7",
     "mustache": "^1.1.0",
     "panda-config": "^1.0.0-alpha-02",
     "shelljs": "^0.3.0",
