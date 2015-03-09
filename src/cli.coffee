@@ -10,6 +10,8 @@
 {read, write, remove} = require "fairmont" # Easy file read/write
 {parse} = require "c50n"           # .cson file parsing
 
+async = (require "when/generator").lift
+
 PH = require "./panda-hook"
 #builder = require "./build/cli"    # Githook Script Generator, through CLI parser.
 
@@ -18,11 +20,11 @@ PH = require "./panda-hook"
 # Helper Fucntions
 #====================
 # Output an Info Blurb and optional message.
-usage = (entry, message) ->
+usage = async (entry, message) ->
   if message?
     process.stderr.write "#{message}\n"
 
-  throw read( resolve( __dirname, "..", "doc", entry ) )
+  throw yield read( resolve( __dirname, "..", "doc", entry ) )
 
 # Accept only the allowed values for flags that take an enumerated type.
 allow_only = (allowed_values, value, flag) ->
@@ -168,6 +170,7 @@ parse_push_arguments = (argv) ->
         usage "push", "\nError: Unrecognized Flag Provided: #{argv[0]}\n"
 
     argv = argv[2..]
+
 
   # Done looping.  Check to see if all required flags have been defined.
   if required_flags.length != 0

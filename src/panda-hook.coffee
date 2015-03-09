@@ -18,11 +18,14 @@ builder = require "./build/build"         # Githook Script Generator
 # Helpers
 #===============================
 # This fucntion enforces configuration defaults if no value is provided.
+# file_fields array is used to loop quickly push and remove files
+file_fields = [ "hook" ]
 use_defaults = (options) ->
-  options.hook_source   ||= "scripts/githooks/coreos_restart"
-  options.hook_name     ||= "post-receive"
-  options.launch_path   ||= "launch"
-  options.remote_alias  ||= "hook"
+  options.launch_path          ||= "launch"
+  options.remote_alias         ||= "hook"
+  options.hook_source          ||= resolve __dirname, "scripts/githooks/coreos_restart.sh"
+  options.hook_name            ||= "post-receive"
+  options.accessory_dir_path   ||= resolve __dirname, "scripts/githooks/coreos_restart"
 
   return options
 
@@ -42,12 +45,12 @@ prepare_template = (options) ->
   options.cluster_port = result[1] || "22"
 
   # Render Template
-  path = resolve __dirname, options.hook_source
+  path = resolve __dirname, "scripts/githooks/coreos_restart/coreos_restart.template"
   input = readFileSync path, "utf-8"
   contents = render input, options
 
-  options.hook_source = resolve __dirname, "scripts/githooks/temp"
-  writeFileSync options.hook_source, contents
+  output_path = resolve __dirname, "scripts/githooks/coreos_restart/coreos_restart.coffee"
+  writeFileSync output_path, contents
 
   return options
 
@@ -78,19 +81,22 @@ module.exports =
     # Generate default CoreOS post-receive githook, unless given another source.
     options = prepare_template options
 
-    exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source} #{options.remote_alias}",
+    exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} 
+               #{options.hook_name} #{options.hook_source} #{options.accessory_dir_path} #{options.remote_alias}",
       {async: false},
       (code, output) ->
         if code == 1
           # The "push" Bash script cannot add a githook if the repo does not exist.
           # Create it now, then try to push again.
           exec "bash #{__dirname}/scripts/create #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.remote_alias}"
-          exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name} #{options.hook_source} #{options.remote_alias}"
+          exec "bash #{__dirname}/scripts/push #{options.hook_address} #{options.hook_port} #{options.repo_name} 
+                     #{options.hook_name} #{options.hook_source} #{options.accessory_dir_path} #{options.remote_alias}"
 
   # This method deletes a githook script from a remote repo.
   rm: (options) ->
+
     exec "bash #{__dirname}/scripts/rm #{options.hook_address} #{options.hook_port} #{options.repo_name} #{options.hook_name}",
-      async:false,
+      {async: false},
       (code, output) ->
         if code == 1
           # If the requested repo does not exist, warn the user.
