@@ -31,6 +31,7 @@ async = (require "when/generator").lift
 # Template Rendered Varialbes
 #===============================================================================
 repo_name = "{{{repo_name}}}"
+cluster_name = "{{{cluster_name}}}"
 
 repo_path = join process.env.HOME, "repos/#{repo_name}"
 launch_path = join repo_path, "launch"
@@ -79,9 +80,13 @@ call ->
 
   # First, determine the branch being pushed and checkout that one.  That information is available
   # from the standard input.
-  #[ignore..., branch_name] = times (read_block lines process.stdin), 3
-  #branch_name = yield branch_name
-  branch_name = "feature/templates"
+  [ignore..., branch_name] = times (read_block lines process.stdin), 1
+  branch_name = yield branch_name
+  branch_name_arr = branch_name.split(" ")[2].split("")[11...]
+  branch_name = ""
+  for letter in branch_name_arr
+    branch_name += letter
+  console.log "*****branch_name: ", branch_name
 
   # Cloning the (freshly updated) bare repo creates a regular one, the beta.  It has a working tree
   # so we can access its files to find services and make other edits that don't get committed to the user's repo.
@@ -119,6 +124,7 @@ call ->
   # Start by rendering the service templates
   config = yield pull_configuration()
   config.branch_name = branch_name
+  config.cluster_name = cluster_name
 
   for service in services
     # Grab configuration for specific service.  Merge upwards with app configuration.
