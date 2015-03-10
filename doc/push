@@ -15,6 +15,8 @@ Required:
   -s  Target hook-server address. Defaults to port 22.
       Example:  <user>@<host_address>:<port>
 
+  -u  Cluster Name.  Please provide the name without domain or port number.
+
 -----------------------------------------------------------
 Optional:
   -a  Source of githook script.  Defaults to panda-hook/src/scripts/githooks/coreos_restart
