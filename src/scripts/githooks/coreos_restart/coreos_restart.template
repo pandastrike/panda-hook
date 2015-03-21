@@ -18,12 +18,11 @@ fs = require "fs"
 # Panda Strike Libraries
 Configurator = require "panda-config"                         # configuration
 {chdir, read, write, stream, lines, times,
- readdir, shell, stat, sleep, merge} = require "fairmont"     # panda-utility belt
+ readdir, shell, exists, sleep, merge,
+ call, async, collect, stat} = require "fairmont"             # panda-utility belt
 
 # Third Party Libraries
-{call} = require "when/generator"                             # promise library
 {promise} = require "when"
-async = (require "when/generator").lift
 {render} = require "mustache"                                 # templating
 
 
@@ -32,6 +31,7 @@ async = (require "when/generator").lift
 #===============================================================================
 repo_name = "{{{repo_name}}}"
 cluster_name = "{{{cluster_name}}}"
+public_domain = "{{{public_domain}}}"
 
 repo_path = join process.env.HOME, "repos/#{repo_name}"
 launch_path = join repo_path, "launch"
@@ -47,7 +47,7 @@ print_banner = (text) ->
   console.log "==============================================================="
 
 get_dirs = async (path) ->
-  file for file in (yield readdir path) when (yield stat (join path, file)).isDirectory()
+  file for file in (collect yield readdir path) when (yield stat join path, file).isDirectory()
 
 pull_configuration = async () ->
   configurator = Configurator.make
@@ -125,6 +125,7 @@ call ->
   config = yield pull_configuration()
   config.branch_name = branch_name
   config.cluster_name = cluster_name
+  config.public_domain = public_domain
 
   for service in services
     # Grab configuration for specific service.  Merge upwards with app configuration.
