@@ -49,6 +49,19 @@ print_banner = (text) ->
 get_dirs = async (path) ->
   file for file in (collect yield readdir path) when (yield stat join path, file).isDirectory()
 
+
+pull_service_configuration = async (service) ->
+  service_configuration_path = join repo_path, "launch/#{service}"
+  configurator = Configurator.make
+    extension: ".yaml"
+    format: "yaml"
+    paths: [ service_configuration_path ]
+
+  config = configurator.make name: service
+  yield config.load()
+
+  return config.data
+
 pull_configuration = async () ->
   configurator = Configurator.make
     extension: ".yaml"
@@ -129,7 +142,8 @@ call ->
 
   for service in services
     # Grab configuration for specific service.  Merge upwards with app configuration.
-    spec = merge config, config.services[service], {service_name: service}, repo_path: repo_path
+    service_config = yield pull_service_configuration service
+    spec = merge config, service_config, {service_name: service}, repo_path: repo_path
 
     # Render Service File
     spec.template_filename = "#{service}.service.template"
