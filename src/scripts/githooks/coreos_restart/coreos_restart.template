@@ -17,6 +17,8 @@ fs = require "fs"
 
 # Panda Strike Libraries
 Configurator = require "panda-config"                         # configuration
+key_forge = require "key-forge" # cryptography
+
 {chdir, read, write, stream, lines, times,
  readdir, shell, exists, sleep, merge,
  call, async, collect, stat} = require "fairmont"             # panda-utility belt
@@ -45,6 +47,9 @@ print_banner = (text) ->
   console.log "==============================================================="
   console.log "#{text}"
   console.log "==============================================================="
+
+# This creates a random authorization token, 16 bytes long and using characters safe for URLs.
+make_key: () -> key_forge.randomKey 16, "base64url"
 
 get_dirs = async (path) ->
   file for file in (collect yield readdir path) when (yield stat join path, file).isDirectory()
@@ -126,6 +131,7 @@ call ->
   config.branch_name = branch_name
   config.cluster_name = cluster_name
   config.public_domain = public_domain
+  config.deployment_id = make_key()
 
   for service in services
     # Grab configuration for specific service.  Merge upwards with app configuration.
