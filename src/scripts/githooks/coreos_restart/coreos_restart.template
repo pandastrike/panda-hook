@@ -49,7 +49,7 @@ print_banner = (text) ->
   console.log "==============================================================="
 
 # This creates a random authorization token, 16 bytes long and using characters safe for URLs.
-make_key: () -> key_forge.randomKey 16, "base64url"
+make_key = () -> key_forge.randomKey 16, "base64url"
 
 get_dirs = async (path) ->
   file for file in (collect yield readdir path) when (yield stat join path, file).isDirectory()
