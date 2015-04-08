@@ -3,7 +3,7 @@
 #=================================================================================
 # This file contains helper functions for the main githook.
 {join} = require "path"
-{async, stat, readdir, collect} = require "fairmont"
+{async, stat, readdir, collect, stream, lines, times} = require "fairmont"
 Configurator = require "panda-config"
 key_forge = require "key-forge"
 

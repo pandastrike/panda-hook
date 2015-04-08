@@ -3,12 +3,12 @@
 #=================================================================================
 # This file contains helper functions related to managing deployment configuration.
 {join} = require "path"
-{async, read, write, merge} = require "fairmont"
+{async, read, write} = require "fairmont"
 {render} = require "mustache"
 
 {pull_configuration, get_dirs, make_key, get_branch_name} = require "./helpers"
 
-module.exports =x
+module.exports =
   # Pull data from the context that gets rendered when the API server transfers this script to the cluster.
   pull_context: async () ->
     context = yield pull_configuration {name: "context", path: __dirname}

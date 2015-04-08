@@ -17,14 +17,11 @@ fs = require "fs"
 
 # Panda Strike Libraries
 Configurator = require "panda-config"             # configuration
-
-{chdir, read, write, stream, lines, times,
- readdir, shell, exists, sleep, merge,
- call, async, collect, stat} = require "fairmont" # panda-utility belt
+{call, shell, sleep} = require "fairmont" # panda-utility belt
 
 # Helpers
-{print_banner, make_key} = require "./helpers"
-{get_services, render_template} = require "./service"
+{print_banner} = require "./helpers"
+{pull_context, get_services, render_template} = require "./service"
 
 
 #===============================================================================

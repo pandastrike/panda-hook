@@ -93,7 +93,7 @@ module.exports =
       options = enforce_defaults options
 
       # Generate default CoreOS post-receive githook, unless given another source.
-      options = yield prepare_template options
+      yield prepare_template options
       {git, hook, app} = options
 
       command_push = "bash #{__dirname}/scripts/push "+
