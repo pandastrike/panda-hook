@@ -25,7 +25,7 @@ module.exports =
     for name in names
       services[name] =
         # Merge Service config upwards with Application-level config.
-        config: merge app, (yield pull_configuration {name, path: join path, name}), {service: name}
+        config: merge app, (yield pull_configuration {name, path: app.launch}), {service: name}
 
     return services
 
