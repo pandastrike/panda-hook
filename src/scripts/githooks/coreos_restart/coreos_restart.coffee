@@ -61,11 +61,13 @@ call ->
     {config} = services[service]
 
     # Render Service File
+    console.log config
     config.template = "#{service}.service.template"
     config.output = "#{service}.service"
     yield render_template config
 
     # Render Dockerfile
+    console.log config
     config.template = "Dockerfile.template"
     config.output = "Dockerfile"
     yield render_template config
@@ -89,19 +91,17 @@ call ->
     # Wipe away the scratch space used by hook server.
     command = "/usr/bin/ssh -A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null " +
               "-p #{port} #{address} sudo rm -rf prelaunch/#{service}"
-    console.log command
-    console.log yield shell command
+    yield shell command
 
     # Copy the service files to the scratch space on the cluster
     command = "scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null " +
               "-P #{port} -r #{app.path}/launch/#{service} " +
               "#{address}:/home/core/prelaunch/"
-    console.log command
-    console.log yield shell command
+    yield shell command
 
     # Use fleetctl to start the services.  Point it at the service files in the scratch space.
     console.log "Spinning Up #{service}"
     command = "/usr/bin/ssh -A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null " +
               "-p #{port} #{address} " +
               "/usr/bin/fleetctl start prelaunch/#{service}/#{service}.service"
-    console.log yield shell command
+    yield shell command
