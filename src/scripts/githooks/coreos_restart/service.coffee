@@ -14,8 +14,8 @@ module.exports =
     context = yield pull_configuration {name: "context", path: __dirname}
     context.app.id = make_key()
     context.app.branch = yield get_branch_name()
-    context.app.path = join process.env.HOME, "repos", app.name
-    context.app.launch = join process.env.HOME, "repos", app.name, "launch"
+    context.app.path = join process.env.HOME, "repos", context.app.name
+    context.app.launch = join process.env.HOME, "repos", context.app.name, "launch"
     return context
 
   # Gather services and their relevant information into one package so we can take appropriate action.
