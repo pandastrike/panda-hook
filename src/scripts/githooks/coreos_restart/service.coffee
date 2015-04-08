@@ -3,7 +3,7 @@
 #=================================================================================
 # This file contains helper functions related to managing deployment configuration.
 {join} = require "path"
-{async, read, write} = require "fairmont"
+{async, read, write, merge} = require "fairmont"
 {render} = require "mustache"
 
 {pull_configuration, get_dirs, make_key, get_branch_name} = require "./helpers"
