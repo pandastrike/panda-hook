@@ -61,13 +61,11 @@ call ->
     {config} = services[service]
 
     # Render Service File
-    console.log config
     config.template = "#{service}.service.template"
     config.output = "#{service}.service"
     yield render_template config
 
     # Render Dockerfile
-    console.log config
     config.template = "Dockerfile.template"
     config.output = "Dockerfile"
     yield render_template config
