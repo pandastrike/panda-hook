@@ -1,0 +1,7 @@
+cluster:
+  address: "{{{cluster.address}}}"
+  port: "{{{cluster.port}}}"
+app:
+  name: "{{{app.name}}}"
+  cluster: "{{{app.cluster}}}"
+  public_domain: "{{{app.public_domain}}}"
