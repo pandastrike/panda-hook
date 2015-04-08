@@ -29,7 +29,7 @@ Configurator = require "panda-config"     # configuration
 #===============================================================================
 call ->
   print_banner "Push Detected. Activating Githook."
-
+  sleep 10000
   # Pull Cluster and Application level context.
   {app, cluster} = yield pull_context()
 
