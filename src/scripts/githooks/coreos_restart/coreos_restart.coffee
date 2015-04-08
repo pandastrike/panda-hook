@@ -16,7 +16,7 @@ fs = require "fs"
 {resolve, join} = require "path"
 
 # Panda Strike Libraries
-Configurator = require "panda-config"             # configuration
+Configurator = require "panda-config"     # configuration
 {call, shell, sleep} = require "fairmont" # panda-utility belt
 
 # Helpers
