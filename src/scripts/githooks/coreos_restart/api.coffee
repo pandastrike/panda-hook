@@ -11,7 +11,7 @@ module.exports =
   # This handler creates a new deployment record.
   create: async (context) ->
     deployments = (discover context.huxley.url).deployments
-    yield dexployments.create context
+    yield deployments.create context
 
   # This handler updates the status of an existing deployment record.
   update: async (context) ->
