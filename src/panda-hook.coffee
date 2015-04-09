@@ -48,11 +48,12 @@ enforce_defaults = (options) ->
 # This function renders the config file of the githook template.
 # TODO: Make this not hard-coded to the "CoreOS Restart" githook.
 prepare_template = async (options) ->
+  console.log options
   # Render Template
   path = resolve __dirname, "scripts/githooks/coreos_restart/context.template"
   input = yield read path
   contents = render input, options
-
+  console.log contents
   output_path = resolve __dirname, "scripts/githooks/coreos_restart/context.yaml"
   yield write output_path, contents
 
