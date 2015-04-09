@@ -68,7 +68,7 @@ module.exports =
   create: async (options) ->
     catch_fail ->
       options = enforce_defaults options
-      {git, hook, app}
+      {git, hook, app} = options
 
       command = "bash #{__dirname}/scripts/create " +
         "#{hook.address} #{hook.port} #{app.name} #{git.alias}"
@@ -116,7 +116,7 @@ module.exports =
   rm: async (options) ->
     catch_fail ->
       options = enforce_defaults options
-      {hook, app}
+      {hook, app} = options
 
       command = "bash #{__dirname}/scripts/rm "+
         "#{hook.address} #{hook.port} #{app.name} #{hook.name}"
