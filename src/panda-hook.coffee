@@ -91,7 +91,7 @@ module.exports =
   push: async (options) ->
     catch_fail ->
       options = enforce_defaults options
-
+      console.log options
       # Generate default CoreOS post-receive githook, unless given another source.
       yield prepare_template options
       {git, hook, app} = options
