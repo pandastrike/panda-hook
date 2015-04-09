@@ -1,7 +1,11 @@
 cluster:
   address: "{{{cluster.address}}}"
   port: "{{{cluster.port}}}"
+  name: "{{{cluster.name}}}"
+  id: "{{{cluster.id}}}"
 app:
   name: "{{{app.name}}}"
-  cluster: "{{{app.cluster}}}"
   public_domain: "{{{app.public_domain}}}"
+huxley:
+  url: "{{{{huxley.url}}}}"
+  token: "{{{huxley.token}}}"

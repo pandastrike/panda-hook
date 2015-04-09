@@ -12,20 +12,25 @@ module.exports =
   # Pull data from the context that gets rendered when the API server transfers this script to the cluster.
   pull_context: async () ->
     context = yield pull_configuration {name: "context", path: __dirname}
-    context.app.id = make_key()
-    context.app.branch = yield get_branch_name()
-    context.app.path = join process.env.HOME, "repos", context.app.name
-    context.app.launch = join process.env.HOME, "repos", context.app.name, "launch"
+    {app} = context
+
+    app.id = make_key()
+    app.status = "starting"
+    app.branch = yield get_branch_name()
+    app.path = join process.env.HOME, "repos", app.name
+    app.launch = join process.env.HOME, "repos", app.name, "launch"
+
+    context.app = app
     return context
 
   # Gather services and their relevant information into one package so we can take appropriate action.
-  get_services: async (app) ->
+  get_services: async (app, cluster) ->
     names = yield get_dirs app.launch
     services = {}
     for name in names
       services[name] =
         # Merge Service config upwards with Application-level config.
-        config: merge app, (yield pull_configuration {name, path: join(app.launch, name)}), {service: name}
+        config: merge app, (yield pull_configuration {name, path: join(app.launch, name)}), {service: name}, {cluster: cluster.name}
 
     return services
 

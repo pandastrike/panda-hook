@@ -1,16 +1,10 @@
 #=================================================================================
 # Huxley Cluster Githook - CoreOS Restart
 #=================================================================================
-# This Bash script controls the actions of a hook-server. While triggered by a git
-# command, this server can taking any additional action possible on a Linux machine.
-
 # Algorithm:
 # (1) Perform a clone of the "bare" repo we just pushed to, creating a regular repo.
 # (2) Use the *.service files in the regular repo to re-deploy CoreOS services.
 
-#===============================================================================
-# Modules
-#===============================================================================
 # Core Libraries
 fs = require "fs"
 {resolve, join} = require "path"
@@ -19,19 +13,20 @@ fs = require "fs"
 Configurator = require "panda-config"     # configuration
 {call, shell, sleep} = require "fairmont" # panda-utility belt
 
-# Helpers
+# Githook components
+api = require "./api"
 {print_banner} = require "./helpers"
-{pull_context, get_services, render_template} = require "./service"
+{pull_context, get_services, render_template} = require "./config"
 
-
-#===============================================================================
-# Main
 #===============================================================================
 call ->
-  print_banner "Push Detected. Activating Githook."
-  sleep 10000
   # Pull Cluster and Application level context.
-  {app, cluster} = yield pull_context()
+  print_banner "Push Detected. Activating Githook."
+  context = yield pull_context()
+  {app, cluster} = context
+
+  # Use this context to create a record in the Huxley API server.
+  yield api.create context
 
   # Cloning the (freshly updated) bare repo creates a regular one, with a working tree we can actually use.
   print_banner "Cloning Bare Repo"
@@ -39,7 +34,7 @@ call ->
   yield shell "/usr/bin/git clone -b #{app.branch} -- #{process.env.HOME}/repos/#{app.name}.git #{app.path}"
 
   # Identify the services we're dealing with.  Every sub-directory of "launch" is a separate service.
-  services = yield get_services app
+  services = yield get_services app, cluster
 
   # Stop every service.
   print_banner "Stopping Service(s)"
@@ -103,3 +98,11 @@ call ->
               "-p #{port} #{address} " +
               "/usr/bin/fleetctl start prelaunch/#{service}/#{service}.service"
     yield shell command
+
+
+  # Monitor the services as they spin-up.
+  command = "/usr/bin/ssh -A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null " +
+            "-p #{cluster.port} #{cluster.address} " +
+            "/usr/bin/fleetctl list-units"
+  {stdout} = yield shell command
+  console.log stdout
