@@ -18,7 +18,7 @@ get_status = async (cluster) ->
   # Parse the output for structured data.
   stdout = stdout.split "\n"
   for i in [0..(stdout.length - 1)]
-    if data[i] == "UNIT\tMACHINE\tACTIVE\tSUB"
+    if stdout[i] == "UNIT\tMACHINE\tACTIVE\tSUB"
       data = stdout[(i + 1)..]
       break
 
