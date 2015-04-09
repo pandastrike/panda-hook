@@ -33,13 +33,11 @@ monitor = async (context, services) ->
     # Read the status of all services.
     status = yield get_status cluster
 
-    # Check for failures. A single failure fails the whole thing.
-    return false for service of services when status[service] == "failed"
-
-    # Check for success. All services must be "active" to pass.
+    # Check for success. All services must be "active" to pass, but a single failure fails the whole thing.
     pass = true
     for service of services
-       pass = false if status[service] != "active"
+      pass = false if status[service] != "active"
+      return false if status[service] == "failed"
 
     # Return success or wait another 10 seconds.
     if pass then return true else yield sleep 10000

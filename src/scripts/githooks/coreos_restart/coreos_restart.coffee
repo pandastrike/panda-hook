@@ -102,5 +102,9 @@ call ->
 
 
   # Monitor the services as they spin-up.
+  print_banner "Service(s) Initialized...  Waiting on Deployment."
   result = yield monitor context, services
-  if result then console.log "Deployment ready." else console.log "Failure..."
+  if result then context.app.status = "online" else context.app.status = "failed"
+
+  yield api.update context
+  if result then console.log "Ready." else console.log "Failure."
