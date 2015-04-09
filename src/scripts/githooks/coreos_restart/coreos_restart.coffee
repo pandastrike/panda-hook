@@ -17,6 +17,7 @@ Configurator = require "panda-config"     # configuration
 api = require "./api"
 {print_banner} = require "./helpers"
 {pull_context, get_services, render_template} = require "./config"
+{monitor} = require "./status"
 
 #===============================================================================
 call ->
@@ -101,8 +102,4 @@ call ->
 
 
   # Monitor the services as they spin-up.
-  command = "/usr/bin/ssh -A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null " +
-            "-p #{cluster.port} #{cluster.address} " +
-            "/usr/bin/fleetctl list-units"
-  {stdout} = yield shell command
-  console.log stdout
+  yield monitor context, services
