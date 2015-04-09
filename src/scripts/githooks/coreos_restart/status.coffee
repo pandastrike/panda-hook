@@ -16,13 +16,8 @@ get_status = async (cluster) ->
   {stdout} = yield shell command
 
   # Parse the output for structured data.
-  stdout = stdout.split "\n"
-  for i in [0..(stdout.length - 1)]
-    if stdout[i] == "UNIT\t\tMACHINE\t\t\t\tACTIVE\t\tSUB"
-      data = stdout[(i + 1)..]
-      break
+  data = stdout.split("\n")[1..]
 
-  data ||= []
   status = {}
   for line in data
     continue if line == ""
