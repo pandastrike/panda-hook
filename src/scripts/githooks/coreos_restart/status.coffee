@@ -29,7 +29,7 @@ get_status = async (cluster) ->
     line = line.split "\t"
     status[line[0][..-9]] = line[2]
 
-
+  return status
 
 # Monitor the services as they spin-up.
 monitor = async (context, services) ->
@@ -46,7 +46,7 @@ monitor = async (context, services) ->
     for service of services
        pass = false if status[service] != "active"
 
-    # Return success or wait another 10 seconds.   
+    # Return success or wait another 10 seconds.
     if pass then return true else yield sleep 10000
 
 module.exports = {monitor}
