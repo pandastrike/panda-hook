@@ -29,14 +29,24 @@ get_status = async (cluster) ->
     line = line.split "\t"
     status[line[0][..-9]] = line[2]
 
-  console.log status
 
 
 # Monitor the services as they spin-up.
 monitor = async (context, services) ->
   {cluster} = context
-  for i in [0..12]
-    yield get_status cluster
-    sleep 10000
+  while true
+    # Read the status of all services.
+    status = yield get_status cluster
 
-module.exports = {get_status, monitor}
+    # Check for failures. A single failure fails the whole thing.
+    return false for service of services when status[service] == "failed"
+
+    # Check for success. All services must be "active" to pass.
+    pass = true
+    for service of services
+       pass = false if status[service] != "active"
+
+    # Return success or wait another 10 seconds.   
+    if pass then return true else yield sleep 10000
+
+module.exports = {monitor}

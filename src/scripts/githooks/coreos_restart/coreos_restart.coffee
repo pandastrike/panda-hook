@@ -102,4 +102,5 @@ call ->
 
 
   # Monitor the services as they spin-up.
-  yield monitor context, services
+  result = yield monitor context, services
+  if result then console.log "Deployment ready." else console.log "Failure..."
