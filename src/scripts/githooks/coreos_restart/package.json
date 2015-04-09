@@ -14,6 +14,7 @@
     "key-forge": "^1.0.0-beta-01",
     "mustache": "^1.1.0",
     "panda-config": "^1.0.0-alpha-02",
+    "pbx": "^1.0.0-alpha-17",
     "when": "^3.7.2"
   }
 }
