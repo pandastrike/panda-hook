@@ -7,5 +7,5 @@ app:
   name: "{{{app.name}}}"
   public_domain: "{{{app.public_domain}}}"
 huxley:
-  url: "{{{{huxley.url}}}"
+  url: "{{{huxley.url}}}"
   token: "{{{huxley.token}}}"
