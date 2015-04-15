@@ -18,12 +18,6 @@
 #===============================
 # Helpers
 #===============================
-catch_fail = (f) ->
-  try
-    f()
-  catch e
-    throw e
-
 # Enforces configuration defaults if no value is provided.
 enforce_defaults = (options) ->
   options.git = {}  unless options.git?
@@ -66,63 +60,59 @@ module.exports =
 
   # This method clones a bare repo on the hook-server.
   create: async (options) ->
-    catch_fail ->
-      options = enforce_defaults options
-      {git, hook, app} = options
+    options = enforce_defaults options
+    {git, hook, app} = options
 
-      command = "bash #{__dirname}/scripts/create " +
-        "#{hook.address} #{hook.port} #{app.name} #{git.alias}"
-      {stdout} = yield shell command
-      console.log stdout
+    command = "bash #{__dirname}/scripts/create " +
+      "#{hook.address} #{hook.port} #{app.name} #{git.alias}"
+    {stdout} = yield shell command
+    console.log stdout
 
 
   # This method deletes the specified repo from the hook-server.
   destroy: async (options) ->
-    catch_fail ->
-      options = enforce_defaults options
-      {app, hook} = options
+    options = enforce_defaults options
+    {app, hook} = options
 
-      command = "bash #{__dirname}/scripts/destroy " +
-        "#{hook.address} #{hook.port} #{app.name}"
-      {stdout} = yield shell command
-      console.log stdout
+    command = "bash #{__dirname}/scripts/destroy " +
+      "#{hook.address} #{hook.port} #{app.name}"
+    {stdout} = yield shell command
+    console.log stdout
 
   # This method places a githook script into a remote repo.
   push: async (options) ->
-    catch_fail ->
-      options = enforce_defaults options
+    options = enforce_defaults options
 
-      # Generate default CoreOS post-receive githook, unless given another source.
-      yield prepare_template options
-      {git, hook, app} = options
+    # Generate default CoreOS post-receive githook, unless given another source.
+    yield prepare_template options
+    {git, hook, app} = options
 
-      command_push = "bash #{__dirname}/scripts/push "+
-        "#{hook.address} #{hook.port} #{app.name} #{hook.name} #{hook.source} #{hook.accessory} #{git.alias}"
-      try
-        {stdout} = yield shell command
-        console.log stdout
-      catch
-        # The "push" Bash script cannot add a githook if the repo does not exist.
-        # Create it now, then try to push again.
-        command_create = "bash #{__dirname}/scripts/create " +
-          "#{hook.address} #{hook.port} #{app.name} #{git.alias}"
-        {stdout} = yield shell command_create
-        console.log stdout
-        {stdout} = yield shell command_push
-        console.log stdout
+    command_push = "bash #{__dirname}/scripts/push "+
+      "#{hook.address} #{hook.port} #{app.name} #{hook.name} #{hook.source} #{hook.accessory} #{git.alias}"
+    try
+      {stdout} = yield shell command
+      console.log stdout
+    catch
+      # The "push" Bash script cannot add a githook if the repo does not exist.
+      # Create it now, then try to push again.
+      command_create = "bash #{__dirname}/scripts/create " +
+        "#{hook.address} #{hook.port} #{app.name} #{git.alias}"
+      {stdout} = yield shell command_create
+      console.log stdout
+      {stdout} = yield shell command_push
+      console.log stdout
 
 
   # This method deletes a githook script from a remote repo.
   rm: async (options) ->
-    catch_fail ->
-      options = enforce_defaults options
-      {hook, app} = options
+    options = enforce_defaults options
+    {hook, app} = options
 
-      command = "bash #{__dirname}/scripts/rm "+
-        "#{hook.address} #{hook.port} #{app.name} #{hook.name}"
-      try
-        {stdout} = yield shell command
-        console.log stdout
-      catch
-        # If the requested repo does not exist, warn the user.
-        process.stdout.write "\nWARNING: The repository \"#{app.name}\" does not exist.\n\n"
+    command = "bash #{__dirname}/scripts/rm "+
+      "#{hook.address} #{hook.port} #{app.name} #{hook.name}"
+    try
+      {stdout} = yield shell command
+      console.log stdout
+    catch
+      # If the requested repo does not exist, warn the user.
+      process.stdout.write "\nWARNING: The repository \"#{app.name}\" does not exist.\n\n"
