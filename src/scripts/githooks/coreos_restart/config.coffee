@@ -6,7 +6,7 @@
 {async, read, write, merge} = require "fairmont"
 {render} = require "mustache"
 
-{pull_configuration, get_dirs, make_key, get_branch_name} = require "./helpers"
+{pull_configuration, get_dirs, make_key} = require "./helpers"
 
 module.exports =
   # Pull data from the context that gets rendered when the API server transfers this script to the cluster.
@@ -16,7 +16,7 @@ module.exports =
 
     app.id = make_key()
     app.status = "starting"
-    app.branch = yield get_branch_name()
+    app.branch = process.argv[2][11..]
     app.path = join process.env.HOME, "repos", app.name
     app.launch = join process.env.HOME, "repos", app.name, "launch"
 
