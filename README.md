@@ -1,41 +1,36 @@
 panda-hook
 =========
 
-### The Ultimate Tool to Manage and Deploy Githook Scripts.
+### Manage and Deploy Githook Scripts.
 
-> **Warning:** This is an experimental project under heavy development.  It's awesome and becoming even more so, but it is a work in progress.
+> **Warning:** This library is part of [Huxley][huxley], an experimental project under heavy development.  It's awesome and becoming even more so, but it is a work in progress.
 
 ---
-Githooks are powerful tools.  Whatever you can script can be triggered from nothing but a git command.  PandaHook helps you manage this magic.
+Githooks are powerful tools.  You can trigger local and server-side scripts with a git command, making them critical for automation.  [Huxley][huxley] relies on them to provide users with continuous integration after updating their server with a "git push".
 
-panda-hook is designed to not only assist you in generating githook scripts, but also setting them up in a remote server.  panda-hook is meant to be your Swiss Army knife, so it features a modular design with multiple sub-commands to keep the codebase manageable and future-friendly.  
+However, one problem with githooks is that they are not transferred like other files in your directory tree.  panda-hook solves that problem and automates the process of setting up remote server-side githooks for Huxley.  panda-hook is meant to be your Swiss Army knife, so it features a modular design with multiple sub-commands to keep the codebase manageable and future-friendly.
 
-## Installation
-You may either use panda-hook as a command-line tool or install it as a dependency into your project.  In either case, you will need CoffeeScript installed.
+Please see the [Huxley Wiki][wiki] for more documentation.  
 
+## Requirements
+panda-hook makes use of ES6 features, including promises and generators.  Using this library requires Node 0.12+.
+
+```shell
+git clone https://github.com/creationix/nvm.git ~/.nvm
+source ~/.nvm/nvm.sh && nvm install 0.12
+```
+
+Compiling the ES6 compliant CoffeeScript requires `coffee-script` 1.9+.
 ```shell
 npm install -g coffee-script
 ```
 
-### Command-Line Tool
-If you'd like to use PandaHook's command-line tool on your local machine, install it globally.
-```shell
-npm install -g pandastrike/panda-hook 
+## Install
+Install panda-hook locally to your project with:
+
 ```
-This gives you a symlinked executable to invoke on your command-line. See [command-line-guide.md][1] for more information on this executable.
-
-### Node Library
-If you would like to install panda-hook as a library and programmatically access its methods, install it locally to your project.  Place this line in the "dependencies" object of your project's `package.json` file.
-
-```json
 npm install pandastrike/panda-hook --save
 ```
 
-See [api-guide.md][2] for more information on programatic access.
-
-## Usage Example
-To see panda-hook in action, please see the Huxley "flavor" examples.  The simplest *Hello World* example is [vanilla][3], so that's a good place to start.
-
-[1]:https://github.com/pandastrike/panda-hook/blob/master/command-line-guide.md
-[2]:https://github.com/pandastrike/panda-hook/blob/master/api-guide.md
-[3]:https://github.com/pandastrike/vanilla
+[huxley]:https://github.com/pandastrike/huxley
+[wiki]:https://github.com/pandastrike/huxley/wiki/panda-hook

@@ -35,7 +35,7 @@ call ->
   yield shell "/usr/bin/git clone -b #{app.branch} -- #{process.env.HOME}/repos/#{app.name}.git #{app.path}"
 
   # Identify the services we're dealing with.  Every sub-directory of "launch" is a separate service.
-  services = yield get_services app, cluster
+  services = yield get_services app
 
   # Stop every service.
   print_banner "Stopping Service(s)"
@@ -54,7 +54,11 @@ call ->
   print_banner "Restarting Service(s)"
   for service of services
     # Grab configuration for specific service.
-    {config} = services[service]
+    services[service].name = service
+    config =
+      app
+      cluster
+      service: services[service]
 
     # Render Service File
     config.template = "#{service}.service.template"

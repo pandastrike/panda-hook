@@ -24,13 +24,13 @@ module.exports =
     return context
 
   # Gather services and their relevant information into one package so we can take appropriate action.
-  get_services: async (app, cluster) ->
+  get_services: async (app) ->
     names = yield get_dirs app.launch
     services = {}
     for name in names
-      services[name] =
-        # Merge Service config upwards with Application-level config.
-        config: merge app, (yield pull_configuration {name, path: join(app.launch, name)}), {service: name}, {cluster: cluster.name}
+      services[name] = yield pull_configuration
+        name
+        path: join app.launch, name
 
     return services
 

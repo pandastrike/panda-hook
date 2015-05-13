@@ -26,15 +26,8 @@ scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -P $2 $5 $1:
 ssh -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -A -p $2 $1 "cd /root/repos/$3.git/hooks && rm -rf coreos_restart/"
 scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -P $2 -r $6 $1:/root/repos/$3.git/hooks/coreos_restart
 ssh -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -A -p $2 $1 "cd /root/repos/$3.git/hooks; chmod +x $4"
+ssh -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -A -p $2 $1 "cd /root/repos/$3.git/hooks/coreos_restart; npm install"
 
-# Also, update the alias for this remote repo to the local git repo.
-git remote rm $7
-git remote add $7 ssh://$1:$2/root/repos/$3.git
-
-echo ""
-echo "This remote repo is now available under the alias \"$7\"."
-echo "Run \"git remote -v\" to examine. "
-echo ""
 
 echo ""
 echo "The githook \"$4\" has been successfully pushed to \"$3.git\" and is online."

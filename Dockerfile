@@ -31,6 +31,11 @@ RUN mkdir aur-packages && cd aur-packages && \
 # Clean up the download directory.
 RUN rm -rf aur-packages
 
+# Create directories to hold privileged data.  "files" is one big repository.
+RUN cd root && mkdir repos && mkdir files
+RUN git config --global user.email 'you@example.com' && git config --global user.name 'Your Name'
+RUN cd root/files && git init
+
 # Create directory to hold SSH data
 RUN mkdir root/.ssh               && \
   touch root/.ssh/authorized_keys && \
