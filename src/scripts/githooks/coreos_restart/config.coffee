@@ -36,12 +36,13 @@ module.exports =
 
   # Renders the templates as full text and then writes to file.
   render_template: async (spec) ->
+    {app, service} = spec
     # Find the template for this service
-    input = join spec.launch, spec.service, spec.template
+    input = join app.launch, service.name, spec.template
     template = yield read input
 
     # Render.
     rendered_string = render template, spec
 
     # Write to file.
-    yield write (join spec.launch, spec.service, spec.output), rendered_string
+    yield write (join app.launch, service.name, spec.output), rendered_string
