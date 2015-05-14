@@ -29,7 +29,7 @@ module.exports =
     services = {}
     for name in names
       services[name] = yield pull_configuration
-        name
+        name: name
         path: join app.launch, name
 
     return services
