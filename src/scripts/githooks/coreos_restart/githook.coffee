@@ -56,8 +56,8 @@ call ->
     # Grab configuration for specific service.
     services[service].name = service
     config =
-      app
-      cluster
+      app: app
+      cluster: cluster
       service: services[service]
 
     # Render Service File
