@@ -11,10 +11,10 @@
   "dependencies": {
     "fairmont": "1.0.0-alpha-17",
     "js-yaml": "^3.2.7",
-    "key-forge": "^1.0.0-beta-01",
+    "key-forge": "1.0.0-beta-01",
     "mustache": "^1.1.0",
-    "panda-config": "^1.0.0-alpha-02",
-    "pbx": "^1.0.0-alpha-17",
+    "panda-config": "1.0.0-alpha-02",
+    "pbx": "pandastrike/pbx#huxley",
     "when": "^3.7.2"
   }
 }
