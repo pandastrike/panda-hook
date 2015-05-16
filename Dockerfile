@@ -33,7 +33,7 @@ RUN rm -rf aur-packages
 
 # Create directories to hold privileged data.  "files" is one big repository.
 RUN cd root && mkdir repos && mkdir files
-RUN git config --global user.email 'you@example.com' && git config --global user.name 'Your Name'
+RUN git config --global user.email 'setup@example.com' && git config --global user.name 'Setup Agent'
 RUN cd root/files && git init
 
 # Create directory to hold SSH data

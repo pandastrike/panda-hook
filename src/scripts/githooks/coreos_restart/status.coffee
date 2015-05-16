@@ -27,7 +27,7 @@ get_status = async (cluster, services) ->
 
     # Save service status, ignoring those not part of this deployment.
     if name in services
-      status[name] = fields[2]  
+      status[name] = fields[2]
     else
       continue
 
@@ -40,7 +40,7 @@ monitor = async (context, services) ->
   while true
     # Read the status of all services.
     status = yield get_status cluster, services
-
+    console.log status
     # Check for success. All services must be "active" to pass, but a single
     # failure ruins the whole thing.
     is_active = (x) -> x == "active"
