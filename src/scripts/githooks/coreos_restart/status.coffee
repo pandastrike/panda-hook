@@ -18,7 +18,7 @@ get_status = async (cluster, services) ->
 
   # Parse the output for structured data.
   data = stdout.split("\n")[1..]
-  status = {}
+  status = []
   for line in data
     continue if line == ""
 
@@ -27,7 +27,7 @@ get_status = async (cluster, services) ->
 
     # Save service status, ignoring those not part of this deployment.
     if name in keys services
-      status[name] = fields[2]
+      status.push "#{name}": fields[2]
     else
       continue
 
