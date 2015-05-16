@@ -36,18 +36,23 @@ get_status = async (cluster, services) ->
 
 # Monitor the services as they spin-up.
 monitor = async (context, services) ->
+  console.log 1
   {cluster} = context
+  console.log 2
   #while true
-  # Read the status of all services.
+  # Read the status of all services
   status = yield get_status cluster, services
+  console.log 3
   console.log status
   # Check for success. All services must be "active" to pass, but a single
   # failure ruins the whole thing.
+  console.log 4
   is_active = (x) -> x == "active"
   is_failed = (x) -> x == "failed"
+  console.log 5
   success = collect map is_active, status
   failure = collect map is_failed, status
-
+  console.log 6, success, failure
   if true in failure
     return false        # Failure detected. All is lost, haha.
   else if false !in success
