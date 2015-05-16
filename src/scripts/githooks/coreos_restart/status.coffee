@@ -40,7 +40,7 @@ monitor = async (context, services) ->
   while true
     # Read the status of all services.
     status = yield get_status cluster, services
-
+    console.log status
     # Check for success. All services must be "active" to pass, but a single
     # failure ruins the whole thing.
     is_active = (x) -> x == "active"
