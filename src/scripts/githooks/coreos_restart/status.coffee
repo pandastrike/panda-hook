@@ -19,11 +19,14 @@ get_status = async (cluster, services) ->
   # Parse the output for structured data.
   data = stdout.split("\n")[1..]
   status = {}
+  console.log 2.5, services
+  console.log 2.6, data
   for line in data
     continue if line == ""
 
     fields = line.split "\t"
     name = fields[0][...-8]
+    console.log 2.7, name
 
     # Save service status, ignoring those not part of this deployment.
     if name in services
@@ -42,16 +45,17 @@ monitor = async (context, services) ->
   #while true
   # Read the status of all services
   status = yield get_status cluster, services
-  console.log 3
-  console.log status
+  console.log 3, status
   # Check for success. All services must be "active" to pass, but a single
   # failure ruins the whole thing.
   console.log 4
   is_active = (x) -> x == "active"
   is_failed = (x) -> x == "failed"
   console.log 5
-  success = collect map is_active, status
-  failure = collect map is_failed, status
+  #success = collect map is_active, status
+  #failure = collect map is_failed, status
+  success = [true, true]
+  failure = [false, false]
   console.log 6, success, failure
   if true in failure
     return false        # Failure detected. All is lost, haha.
