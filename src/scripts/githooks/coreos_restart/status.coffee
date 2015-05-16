@@ -37,22 +37,22 @@ get_status = async (cluster, services) ->
 # Monitor the services as they spin-up.
 monitor = async (context, services) ->
   {cluster} = context
-  while true
-    # Read the status of all services.
-    status = yield get_status cluster, services
-    console.log status
-    # Check for success. All services must be "active" to pass, but a single
-    # failure ruins the whole thing.
-    is_active = (x) -> x == "active"
-    is_failed = (x) -> x == "failed"
-    success = collect map is_active, status
-    failure = collect map is_failed, status
+  #while true
+  # Read the status of all services.
+  status = yield get_status cluster, services
+  console.log status
+  # Check for success. All services must be "active" to pass, but a single
+  # failure ruins the whole thing.
+  is_active = (x) -> x == "active"
+  is_failed = (x) -> x == "failed"
+  success = collect map is_active, status
+  failure = collect map is_failed, status
 
-    if true in failure
-      return false        # Failure detected. All is lost, haha.
-    else if false !in success
-      return true         # *All* services are online and ready.
-    else
-      yield sleep 10000   # Continue polling.
+  if true in failure
+    return false        # Failure detected. All is lost, haha.
+  else if false !in success
+    return true         # *All* services are online and ready.
+  else
+    yield sleep 10000   # Continue polling.
 
 module.exports = {monitor}
