@@ -24,24 +24,25 @@ module.exports =
     return context
 
   # Gather services and their relevant information into one package so we can take appropriate action.
-  get_services: async (app, cluster) ->
+  get_services: async (app) ->
     names = yield get_dirs app.launch
     services = {}
     for name in names
-      services[name] =
-        # Merge Service config upwards with Application-level config.
-        config: merge app, (yield pull_configuration {name, path: join(app.launch, name)}), {service: name}, {cluster: cluster.name}
+      services[name] = yield pull_configuration
+        name: name
+        path: join app.launch, name
 
     return services
 
   # Renders the templates as full text and then writes to file.
   render_template: async (spec) ->
+    {app, service} = spec
     # Find the template for this service
-    input = join spec.launch, spec.service, spec.template
+    input = join app.launch, service.name, spec.template
     template = yield read input
 
     # Render.
     rendered_string = render template, spec
 
     # Write to file.
-    yield write (join spec.launch, spec.service, spec.output), rendered_string
+    yield write (join app.launch, service.name, spec.output), rendered_string

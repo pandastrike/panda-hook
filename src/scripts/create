@@ -25,12 +25,3 @@ echo ""
 echo "The bare repo \"$3.git\" has been successfully created"
 echo "and is now ready to accept githooks."
 echo ""
-
-# Also, add an alias for this remote repo to the local git repo.
-git remote rm $4
-git remote add $4 ssh://$1:$2/root/repos/$3.git
-
-echo ""
-echo "This remote repo is now available under the alias \"$4\"."
-echo "Run \"git remote -v\" to examine. "
-echo ""

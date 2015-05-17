@@ -1,6 +1,6 @@
 {
   "name": "panda-hook",
-  "version": "0.1.7",
+  "version": "0.0.0",
   "description": "Githook Script Management Made Easy",
   "main": "src/panda-hook.coffee",
   "bin": {
@@ -18,7 +18,10 @@
     "git",
     "continuous-integration"
   ],
-  "author": "David Harper",
+  "contributors": [
+    "David Harper <david@pandastrike.com>",
+    "Dan Yoder <dan@pandastrike.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pandastrike/panda-hook/issues"
@@ -26,9 +29,9 @@
   "homepage": "https://github.com/pandastrike/panda-hook",
   "dependencies": {
     "c50n": "^0.7.1",
-    "fairmont": "1.0.0-alpha-20",
+    "fairmont": "1.0.0-beta-03",
     "mustache": "^1.1.0",
-    "pbx": "^1.0.0-alpha-17",
+    "pbx": "1.0.0-beta-05",
     "when": "^3.7.2"
   }
 }

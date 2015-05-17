@@ -5,7 +5,7 @@ cluster:
   id: "{{{cluster.id}}}"
 app:
   name: "{{{app.name}}}"
-  public_domain: "{{{app.public_domain}}}"
+  domain: "{{{app.domain}}}"
 huxley:
   url: "{{{huxley.url}}}"
   token: "{{{huxley.token}}}"

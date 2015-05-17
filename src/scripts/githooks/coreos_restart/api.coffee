@@ -15,5 +15,5 @@ module.exports =
 
   # This handler updates the status of an existing deployment record.
   update: async (context) ->
-    deployment = (yield discover context.huxley.url).deployment
-    yield deployment.update context
+    deployments = (yield discover context.huxley.url).deployments
+    yield deployments.update context
