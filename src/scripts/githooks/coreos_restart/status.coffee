@@ -7,7 +7,6 @@
 {async, shell, sleep, collect, map, keys} = require "fairmont"
 api = require "./api"
 
-
 get_status = async (cluster, services) ->
   # Query the cluster's fleetctl tool for information about services.
   {stdout} = yield shell "/usr/bin/ssh -A " +
