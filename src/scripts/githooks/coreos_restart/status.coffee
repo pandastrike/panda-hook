@@ -43,7 +43,7 @@ monitor = async (context, services) ->
     # Check for success. All services must be "active" to pass, but a single
     # failure ruins the whole thing.
     is_active = (x) -> x == "active"
-    is_failed = (x) -> x == "failed"
+    is_failed = (x) -> if (x == "failed" || x == "dead") then true else false
     success = collect map is_active, status
     failure = collect map is_failed, status
 
