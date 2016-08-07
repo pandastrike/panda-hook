@@ -1,9 +1,13 @@
 panda-hook
 =========
 
-### Manage and Deploy Githook Scripts.
+> **IMPORTANT** This project is no longer under active development.
+> Based on what we've learned building this,
+> we recommend looking at [Convox][] instead.
 
-> **Warning:** This library is part of [Huxley][huxley], an experimental project under heavy development.  It's awesome and becoming even more so, but it is a work in progress.
+[Convox]:https://github.com/convox/rack
+
+### Manage and Deploy Githook Scripts.
 
 ---
 Githooks are powerful tools.  You can trigger local and server-side scripts with a git command, making them critical for automation.  [Huxley][huxley] relies on them to provide users with continuous integration after updating their server with a "git push".
